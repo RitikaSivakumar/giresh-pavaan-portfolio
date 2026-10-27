@@ -35,11 +35,27 @@ export interface SkillCategory {
 export interface GalleryPhoto {
   id: string;
   src: string;
+  fallbackSrc?: string;
   title: string;
   subtitle: string;
   description: string;
   tag: string;
   location?: string;
   isPrimary?: boolean;
+  filename?: string;
+}
+
+export interface AchievementCertificate {
+  id: string;
+  number: string;
+  title: string;
+  event: string;
+  organizer: string;
+  date: string;
+  category: string;
+  badge?: string;
+  imageSrc: string;
+  description: string;
+  isFirstPlace?: boolean;
 }
 

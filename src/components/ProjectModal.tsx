@@ -61,26 +61,26 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-project-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#07111F]/90 backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/92 backdrop-blur-md animate-fade-in"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#0B192B] border border-[#243B53] rounded-sm shadow-[0_20px_60px_rgba(7,17,31,0.95)] text-[#F1F5F9] transition-all"
+        className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#111318] border border-[#D4AF37]/35 rounded-sm shadow-[0_25px_70px_rgba(0,0,0,0.95)] text-[#E8DFD8] transition-all"
       >
         {/* Corner metallic clips */}
-        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#3B82F6] z-30" />
-        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#3B82F6] z-30" />
-        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#3B82F6] z-30" />
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#3B82F6] z-30" />
+        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37] z-30" />
+        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37] z-30" />
+        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37] z-30" />
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37] z-30" />
 
         {/* Top Sticky Header */}
-        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#0B192B]/95 backdrop-blur-md border-b border-[#243B53]">
+        <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#0B0B0D]/95 backdrop-blur-md border-b border-[#D4AF37]/20">
           <div className="flex items-center gap-3">
-            <span className="px-2.5 py-0.5 rounded-xs bg-[#3B82F6] text-[#07111F] text-[11px] font-mono font-bold tracking-widest uppercase shadow-xs">
+            <span className="px-2.5 py-0.5 rounded-xs bg-[#D4AF37] text-black text-[11px] font-mono font-bold tracking-widest uppercase shadow-xs">
               PROJECT {project.projectNumber}
             </span>
-            <span className="text-xs font-mono text-[#A7B4C7] uppercase">
+            <span className="text-xs font-mono text-[#A8988B] uppercase">
               {project.category}
             </span>
           </div>
@@ -91,7 +91,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               onClose();
             }}
             aria-label="Close modal"
-            className="p-1.5 rounded-xs text-[#A7B4C7] hover:text-[#60A5FA] hover:bg-[#10243A] transition-colors cursor-pointer"
+            className="p-1.5 rounded-xs text-[#A8988B] hover:text-[#D4AF37] hover:bg-[#14110E] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -100,12 +100,13 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
         {/* Modal Body */}
         <div className="p-6 sm:p-8 space-y-7">
           {/* Visual Schematic */}
-          <div className="relative aspect-video w-full rounded-xs bg-[#07111F] overflow-hidden border border-[#243B53] shadow-inner">
+          <div className="relative aspect-video w-full rounded-xs bg-[#050505] overflow-hidden border border-[#D4AF37]/20 shadow-inner">
             {renderVisual()}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B192B] via-transparent to-transparent opacity-80 pointer-events-none" />
-            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-[#60A5FA]">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-transparent to-transparent opacity-75 pointer-events-none" />
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-[#D4AF37]">
               <span>TECHNICAL BLUEPRINT VIEW</span>
-              <span className="px-2 py-0.5 bg-[#07111F]/85 rounded-xs border border-[#22D3EE]/40 text-[#22D3EE]">
+              <span className="px-2 py-0.5 bg-[#14110E]/95 rounded-xs border border-[#D4AF37]/50 text-[#D4AF37] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
                 {project.status}
               </span>
             </div>
@@ -115,26 +116,26 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           <div className="space-y-3">
             <h2
               id="modal-project-title"
-              className="font-serif text-2xl sm:text-4xl text-[#F1F5F9] font-light uppercase tracking-wide leading-tight"
+              className="font-serif text-2xl sm:text-4xl text-[#E8DFD8] font-light uppercase tracking-wide leading-tight"
             >
               {project.title}
             </h2>
 
-            <p className="text-sm sm:text-base text-[#A7B4C7] leading-relaxed font-sans">
+            <p className="text-sm sm:text-base text-[#A8988B] leading-relaxed font-sans">
               {project.fullDescription}
             </p>
           </div>
 
           {/* Objectives */}
-          <div className="p-5 rounded-xs bg-[#10243A] border border-[#243B53] space-y-3">
-            <h3 className="text-xs font-mono font-bold text-[#60A5FA] uppercase tracking-[0.15em] flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#3B82F6]" />
+          <div className="p-5 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/20 space-y-3">
+            <h3 className="text-xs font-mono font-bold text-[#D4AF37] uppercase tracking-[0.15em] flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
               <span>Project Objectives</span>
             </h3>
-            <ul className="space-y-2 text-xs sm:text-sm text-[#F1F5F9] font-sans">
+            <ul className="space-y-2 text-xs sm:text-sm text-[#E8DFD8] font-sans">
               {project.objectives.map((obj, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="text-[#22D3EE] mt-0.5 font-mono">0{i + 1}.</span>
+                  <span className="text-[#D4AF37] mt-0.5 font-mono">0{i + 1}.</span>
                   <span>{obj}</span>
                 </li>
               ))}
@@ -144,16 +145,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           {/* Tools & CAD Considerations Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Tools Planned */}
-            <div className="p-5 rounded-xs bg-[#10243A] border border-[#243B53] space-y-3">
-              <h3 className="text-xs font-mono font-bold text-[#60A5FA] uppercase tracking-[0.15em] flex items-center gap-2">
-                <Wrench className="w-4 h-4 text-[#3B82F6]" />
+            <div className="p-5 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/20 space-y-3">
+              <h3 className="text-xs font-mono font-bold text-[#D4AF37] uppercase tracking-[0.15em] flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-[#D4AF37]" />
                 <span>Tools & Software</span>
               </h3>
               <div className="flex flex-wrap gap-2">
                 {project.toolsPlanned.map((tool, i) => (
                   <span
                     key={i}
-                    className="px-2.5 py-1 rounded-xs bg-[#0B192B] border border-[#243B53] text-xs font-mono text-[#F1F5F9]"
+                    className="px-2.5 py-1 rounded-xs bg-[#14110E] border border-[#D4AF37]/35 text-xs font-mono text-[#E8DFD8]"
                   >
                     {tool}
                   </span>
@@ -162,15 +163,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             </div>
 
             {/* CAD / Engineering Considerations */}
-            <div className="p-5 rounded-xs bg-[#10243A] border border-[#243B53] space-y-3">
-              <h3 className="text-xs font-mono font-bold text-[#60A5FA] uppercase tracking-[0.15em] flex items-center gap-2">
-                <Compass className="w-4 h-4 text-[#3B82F6]" />
+            <div className="p-5 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/20 space-y-3">
+              <h3 className="text-xs font-mono font-bold text-[#D4AF37] uppercase tracking-[0.15em] flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#D4AF37]" />
                 <span>Technical Considerations</span>
               </h3>
-              <ul className="space-y-1.5 text-xs text-[#A7B4C7] font-sans">
+              <ul className="space-y-1.5 text-xs text-[#A8988B] font-sans">
                 {project.cadConsiderations.map((item, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-[#3B82F6]">•</span>
+                    <span className="text-[#D4AF37]">•</span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -179,26 +180,26 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           </div>
 
           {/* Learning Outcomes */}
-          <div className="p-5 rounded-xs bg-[#10243A] border border-[#243B53] space-y-3">
-            <h3 className="text-xs font-mono font-bold text-[#60A5FA] uppercase tracking-[0.15em] flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#22D3EE]" />
+          <div className="p-5 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/20 space-y-3">
+            <h3 className="text-xs font-mono font-bold text-[#D4AF37] uppercase tracking-[0.15em] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
               <span>Target Learning Outcomes</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {project.learningOutcomes.map((outcome, i) => (
-                <div key={i} className="p-3 rounded-xs bg-[#0B192B] border border-[#243B53]">
-                  <span className="font-mono text-[10px] text-[#22D3EE] block mb-1 font-bold">
+                <div key={i} className="p-3 rounded-xs bg-[#111318] border border-[#D4AF37]/15">
+                  <span className="font-mono text-[10px] text-[#D4AF37] block mb-1 font-bold">
                     OUTCOME 0{i + 1}
                   </span>
-                  <p className="text-xs text-[#F1F5F9]">{outcome}</p>
+                  <p className="text-xs text-[#E8DFD8]">{outcome}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Disclaimer Note */}
-          <div className="p-4 rounded-xs bg-[#10243A] border border-[#243B53] text-xs font-mono text-[#A7B4C7] flex items-start gap-2.5">
-            <AlertCircle className="w-4 h-4 text-[#60A5FA] shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xs bg-[#111318] border border-[#D4AF37]/20 text-xs font-mono text-[#A8988B] flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
             <span>
               This project is part of Giresh Pavaan S K&apos;s academic exploration track at Dr. Mahalingam College of Engineering. Objectives and CAD schematics reflect coursework and study plans.
             </span>

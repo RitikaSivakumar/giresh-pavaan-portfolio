@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Mail, Linkedin, MapPin } from 'lucide-react';
+import { ArrowUp, Mail, Linkedin, MapPin, Phone } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData.ts';
 import { playCinemaChime } from './EngineeringVisuals.tsx';
 
@@ -20,6 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ linkedinUrl }) => {
     { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' },
+    { name: 'Achievements', href: '#achievements' },
     { name: 'Journey', href: '#journey' },
     { name: 'Gallery', href: '#gallery' },
     { name: 'Contact', href: '#contact' },
@@ -35,32 +36,32 @@ export const Footer: React.FC<FooterProps> = ({ linkedinUrl }) => {
   };
 
   return (
-    <footer className="bg-[#07111F] border-t border-[#243B53] text-[#A7B4C7] py-16 w-full select-none">
+    <footer className="bg-[#050505] border-t border-[#D4AF37]/20 text-[#A8988B] py-16 w-full select-none">
       <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#243B53]/70">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#D4AF37]/15">
           {/* Brand Col */}
           <div className="md:col-span-5 space-y-3">
             <div className="flex items-center gap-2.5">
-              <span className="font-serif text-2xl font-light text-gradient-electric tracking-tight">
+              <span className="font-serif text-2xl font-light text-gradient-gold tracking-tight">
                 GP.
               </span>
-              <span className="font-serif text-lg font-light text-[#F1F5F9] uppercase tracking-wider">
+              <span className="font-serif text-lg font-light text-[#E8DFD8] uppercase tracking-wider">
                 {PERSONAL_INFO.fullName}
               </span>
             </div>
 
-            <p className="text-xs font-mono text-[#60A5FA] uppercase tracking-wider">
+            <p className="text-xs font-mono text-[#D4AF37] uppercase tracking-wider">
               {PERSONAL_INFO.title} · {PERSONAL_INFO.institution}
             </p>
 
-            <p className="font-serif italic text-sm text-[#A7B4C7] max-w-sm pt-1">
+            <p className="font-serif italic text-sm text-[#A8988B] max-w-sm pt-1">
               &ldquo;DESIGNED WITH CURIOSITY. BUILT THROUGH LEARNING.&rdquo;
             </p>
           </div>
 
           {/* Quick Nav */}
           <div className="md:col-span-4 space-y-3">
-            <span className="block font-mono text-[11px] font-bold text-[#22D3EE] uppercase tracking-[0.2em]">
+            <span className="block font-mono text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em]">
               NAVIGATION
             </span>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
@@ -69,7 +70,7 @@ export const Footer: React.FC<FooterProps> = ({ linkedinUrl }) => {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="hover:text-[#60A5FA] transition-colors"
+                  className="hover:text-[#24B8FF] transition-colors"
                 >
                   {link.name}
                 </a>
@@ -79,46 +80,54 @@ export const Footer: React.FC<FooterProps> = ({ linkedinUrl }) => {
 
           {/* Connect Details */}
           <div className="md:col-span-3 space-y-3">
-            <span className="block font-mono text-[11px] font-bold text-[#22D3EE] uppercase tracking-[0.2em]">
+            <span className="block font-mono text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em]">
               CONTACT DETAILS
             </span>
             <div className="space-y-2 text-xs font-mono">
               <a
                 href={`mailto:${PERSONAL_INFO.email}`}
-                className="flex items-center gap-2 text-[#F1F5F9] hover:text-[#60A5FA] transition-colors break-all"
+                className="flex items-center gap-2 text-[#E8DFD8] hover:text-[#24B8FF] transition-colors break-all"
               >
-                <Mail className="w-3.5 h-3.5 shrink-0 text-[#3B82F6]" />
+                <Mail className="w-3.5 h-3.5 shrink-0 text-[#D4AF37]" />
                 <span>{PERSONAL_INFO.email}</span>
+              </a>
+
+              <a
+                href={`tel:${PERSONAL_INFO.phone}`}
+                className="flex items-center gap-2 text-[#E8DFD8] hover:text-[#24B8FF] transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5 shrink-0 text-[#D4AF37]" />
+                <span>{PERSONAL_INFO.phone}</span>
               </a>
 
               <a
                 href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[#F1F5F9] hover:text-[#60A5FA] transition-colors"
+                className="flex items-center gap-2 text-[#E8DFD8] hover:text-[#24B8FF] transition-colors"
               >
-                <Linkedin className="w-3.5 h-3.5 shrink-0 text-[#3B82F6]" />
+                <Linkedin className="w-3.5 h-3.5 shrink-0 text-[#D4AF37]" />
                 <span>LinkedIn Profile</span>
               </a>
 
-              <div className="flex items-center gap-2 text-[#A7B4C7] text-[11px]">
-                <MapPin className="w-3.5 h-3.5 shrink-0 text-[#3B82F6]" />
-                <span>Pollachi, Coimbatore - 642003</span>
+              <div className="flex items-center gap-2 text-[#A8988B] text-[11px]">
+                <MapPin className="w-3.5 h-3.5 shrink-0 text-[#D4AF37]" />
+                <span>{PERSONAL_INFO.location}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Strip */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#A7B4C7]">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#A8988B]">
           <p>© {currentYear} Giresh Pavaan S K. All rights reserved.</p>
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xs border border-[#243B53] hover:border-[#3B82F6] hover:text-[#60A5FA] bg-[#10243A]/80 text-[#F1F5F9] transition-all cursor-pointer text-[11px] shadow-xs"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xs border border-[#D4AF37]/30 hover:border-[#24B8FF] hover:text-[#24B8FF] bg-[#111318] text-[#E8DFD8] transition-all cursor-pointer text-[11px] shadow-xs"
           >
             <span>BACK TO TOP</span>
-            <ArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5 text-[#D4AF37]" />
           </button>
         </div>
       </div>

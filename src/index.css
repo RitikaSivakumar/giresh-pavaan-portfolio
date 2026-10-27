@@ -7,23 +7,28 @@
     --font-display: 'Cinzel', 'Cormorant Garamond', serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     
-    /* Midnight Blue + Electric Blue Color System */
-    --bg-primary: #07111F;
-    --bg-secondary: #0B192B;
-    --bg-card: #10243A;
+    /* Black + Gold + Blue Engineering Palette */
+    /* 70% Deep Black & Dark Charcoal, 20% Metallic Gold, 10% Electric Blue */
+    --bg-primary: #050505;
+    --bg-secondary: #0B0B0D;
+    --bg-card: #111318;
     
-    --blue-primary: #3B82F6;
-    --blue-highlight: #60A5FA;
-    --blue-cyan: #22D3EE;
-    --border-muted: #243B53;
+    --gold-primary: #D4AF37;
+    --gold-highlight: #F5E6B3;
+    --gold-bronze: #8C6D4F;
+    --border-gold: rgba(212, 175, 55, 0.25);
     
-    --text-primary: #F1F5F9;
-    --text-secondary: #A7B4C7;
+    --blue-accent: #24B8FF;
+    --blue-navy: #10233F;
+    --border-blue: rgba(36, 184, 255, 0.35);
+    
+    --text-primary: #E8DFD8;
+    --text-secondary: #A8988B;
   }
 
   body {
-    background-color: #07111F;
-    color: #F1F5F9;
+    background-color: #050505;
+    color: #E8DFD8;
     font-family: var(--font-sans);
     letter-spacing: -0.01em;
     overflow-x: hidden;
@@ -34,74 +39,61 @@
   }
 }
 
-/* Electric Blue & Cyan Cinematic Text Gradients */
-.text-gradient-electric,
+/* Antique Gold Cinematic Text Gradients */
 .text-gold-gradient,
 .text-gradient-gold {
-  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #22D3EE 100%);
+  background: linear-gradient(135deg, #F5E6B3 0%, #D4AF37 50%, #8C6D4F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-cyan-gradient,
 .text-bronze-gradient {
-  background: linear-gradient(135deg, #F1F5F9 0%, #93C5FD 50%, #22D3EE 100%);
+  background: linear-gradient(135deg, #E8DFD8 0%, #D4AF37 50%, #8C6D4F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Electric Blue Glows */
-.blue-glow-sm,
+/* Antique Gold Glows */
 .gold-glow-sm {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
 }
 
-.blue-glow-md,
 .gold-glow-md {
-  box-shadow: 0 0 35px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.3);
 }
 
-.blue-glow-lg,
 .gold-glow-lg {
-  box-shadow: 0 0 70px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 70px rgba(212, 175, 55, 0.35);
 }
 
-.cyan-glow-sm {
-  box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
-}
-
-.border-blue-subtle,
 .border-gold-subtle {
-  border-color: #243B53;
+  border-color: rgba(212, 175, 55, 0.25);
 }
 
-/* Premium Buttons in Midnight + Electric Blue */
-.btn-gold,
-.btn-blue {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-  color: #07111F;
+/* Premium Buttons in Black + Antique Gold */
+.btn-gold {
+  background: linear-gradient(135deg, #D4AF37 0%, #AA8220 100%);
+  color: #000000;
   font-weight: 600;
   letter-spacing: 0.15em;
   padding: 0.75rem 1.75rem;
   border-radius: 2px;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-transform: uppercase;
   font-size: 0.75rem;
 }
 
-.btn-gold:hover,
-.btn-blue:hover {
-  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.55);
+.btn-gold:hover {
+  background: linear-gradient(135deg, #F5E6B3 0%, #D4AF37 100%);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
   transform: translateY(-1px);
 }
 
-.btn-gold-outline,
-.btn-blue-outline {
-  background: #10243A;
-  color: #60A5FA;
-  border: 1px solid #3B82F6;
+.btn-gold-outline {
+  background: #14110E;
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
   font-weight: 500;
   letter-spacing: 0.15em;
   padding: 0.75rem 1.75rem;
@@ -111,44 +103,43 @@
   font-size: 0.75rem;
 }
 
-.btn-gold-outline:hover,
-.btn-blue-outline:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: #60A5FA;
-  color: #F1F5F9;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+.btn-gold-outline:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: #F5E6B3;
+  color: #E8DFD8;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
   transform: translateY(-1px);
 }
 
 /* Blueprint Engineering Grid Pattern & Subtle Vignette */
 .bg-cinematic-radial {
-  background: radial-gradient(circle at 50% 25%, rgba(59, 130, 246, 0.08) 0%, rgba(11, 25, 43, 0.4) 45%, transparent 75%),
-              radial-gradient(circle at 20% 80%, rgba(34, 211, 238, 0.04) 0%, transparent 60%);
+  background: radial-gradient(circle at 50% 25%, rgba(212, 175, 55, 0.06) 0%, rgba(10, 8, 6, 0.4) 45%, transparent 75%),
+              radial-gradient(circle at 20% 80%, rgba(140, 109, 79, 0.04) 0%, transparent 60%);
 }
 
 .bg-cinematic-mesh,
 .bg-blueprint-grid {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(212, 175, 55, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 1px, transparent 1px);
 }
 
-/* Custom Electric Blue Scrollbar */
+/* Custom Antique Gold Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #07111F;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #243B53;
+  background: #2A241E;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82F6;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  background: #D4AF37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
 /* Custom Cursor */

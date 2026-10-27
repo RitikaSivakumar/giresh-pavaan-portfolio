@@ -81,29 +81,29 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <>
-      {/* Precision Electric Blue Center Dot */}
+      {/* Precision Antique Gold Center Dot */}
       <div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#3B82F6] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 shadow-[0_0_10px_rgba(59,130,246,0.9)]"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#D4AF37] pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 shadow-[0_0_10px_rgba(212,175,55,0.9)]"
         style={{
           transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
         }}
       />
 
-      {/* Trailing Outer Ring with contextual label expand and Cyan glow */}
+      {/* Trailing Outer Ring with contextual label expand and Gold glow */}
       <div
         className={`fixed top-0 left-0 rounded-full border pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-[width,height,background-color,border-color,box-shadow] duration-200 ease-out ${
           cursorText
-            ? 'w-18 h-18 bg-[#10243A]/90 border-[#3B82F6] shadow-[0_0_22px_rgba(34,211,238,0.45)] backdrop-blur-xs'
+            ? 'w-18 h-18 bg-[#14110E]/90 border-[#D4AF37] shadow-[0_0_22px_rgba(212,175,55,0.45)] backdrop-blur-xs'
             : isHovering
-            ? 'w-12 h-12 bg-[#3B82F6]/15 border-[#22D3EE] shadow-[0_0_16px_rgba(34,211,238,0.35)]'
-            : 'w-6 h-6 bg-transparent border-[#3B82F6]/40'
+            ? 'w-12 h-12 bg-[#D4AF37]/15 border-[#D4AF37] shadow-[0_0_16px_rgba(212,175,55,0.35)]'
+            : 'w-6 h-6 bg-transparent border-[#D4AF37]/40'
         }`}
         style={{
           transform: `translate3d(${trailingPos.x}px, ${trailingPos.y}px, 0)`,
         }}
       >
         {cursorText && (
-          <span className="text-[9px] font-mono font-bold tracking-widest text-[#22D3EE] uppercase select-none">
+          <span className="text-[9px] font-mono font-bold tracking-widest text-[#D4AF37] uppercase select-none">
             {cursorText}
           </span>
         )}

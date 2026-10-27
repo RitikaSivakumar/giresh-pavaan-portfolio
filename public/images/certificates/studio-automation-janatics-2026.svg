@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0E0C09"/>
+      <stop offset="50%" stop-color="#070605"/>
+      <stop offset="100%" stop-color="#120F0C"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8C6D4F"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#8C6D4F"/>
+    </linearGradient>
+    <linearGradient id="sealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="50%" stop-color="#8C6D4F"/>
+      <stop offset="100%" stop-color="#4A3828"/>
+    </linearGradient>
+    <pattern id="gridPattern" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#D4AF37" stroke-width="0.3" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="900" height="620" fill="url(#bgGrad)"/>
+  <rect width="900" height="620" fill="url(#gridPattern)"/>
+
+  <!-- Outer Antique Gold Border -->
+  <rect x="22" y="22" width="856" height="576" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" rx="3"/>
+  <rect x="30" y="30" width="840" height="560" fill="none" stroke="#D4AF37" stroke-opacity="0.25" stroke-width="1" rx="2"/>
+  <rect x="34" y="34" width="832" height="552" fill="none" stroke="#8C6D4F" stroke-opacity="0.2" stroke-width="0.5" stroke-dasharray="4 2"/>
+
+  <!-- Corner Guilloche / Metallic Motifs -->
+  <path d="M 22 55 L 55 22 M 22 75 L 75 22 M 22 95 L 95 22" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.35"/>
+  <path d="M 878 55 L 845 22 M 878 75 L 825 22 M 878 95 L 805 22" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.35"/>
+  <path d="M 22 565 L 55 598 M 22 545 L 75 598 M 22 525 L 95 598" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.35"/>
+  <path d="M 878 565 L 845 598 M 878 545 L 825 598 M 878 525 L 805 598" stroke="#D4AF37" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Top Center Header Classification -->
+  <rect x="360" y="44" width="180" height="22" rx="2" fill="#181410" stroke="#D4AF37" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="450" y="59" fill="#D4AF37" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" text-anchor="middle" letter-spacing="2.5">
+    INDUSTRIAL AUTOMATION WORKSHOP
+  </text>
+
+  <!-- Certificate Main Title -->
+  <text x="450" y="106" fill="#E8DFD8" font-family="'Cinzel', serif" font-size="20" font-weight="600" text-anchor="middle" letter-spacing="3.5">
+    CERTIFICATE OF PARTICIPATION
+  </text>
+
+  <line x1="320" y1="120" x2="580" y2="120" stroke="url(#goldGrad)" stroke-width="1"/>
+  <circle cx="450" cy="120" r="3" fill="#D4AF37"/>
+
+  <!-- Conferment Notice -->
+  <text x="450" y="152" fill="#A8988B" font-family="'Montserrat', sans-serif" font-size="11" text-anchor="middle" letter-spacing="2">
+    THIS OFFICIAL CREDENTIAL IS PROUDLY PRESENTED TO
+  </text>
+
+  <!-- Recipient Name in Bold Antique Gold Display -->
+  <text x="450" y="202" fill="url(#goldGrad)" font-family="'Cormorant Garamond', serif" font-size="34" font-weight="700" text-anchor="middle" letter-spacing="4">
+    GIRESH PAVAAN S K
+  </text>
+
+  <!-- Recipient Department / Affiliation -->
+  <text x="450" y="232" fill="#E8DFD8" font-family="'Montserrat', sans-serif" font-size="11" font-weight="500" text-anchor="middle" opacity="0.9" letter-spacing="1">
+    Participant · Department of Mechanical Engineering
+  </text>
+
+  <!-- In Recognition Of Body Text -->
+  <text x="450" y="272" fill="#A8988B" font-family="'Montserrat', sans-serif" font-size="11" text-anchor="middle" letter-spacing="1.5">
+    FOR SUCCESSFUL PARTICIPATION AND ACTIVE DEMONSTRATION IN
+  </text>
+
+  <!-- Event Title -->
+  <text x="450" y="312" fill="#E8DFD8" font-family="'Cinzel', serif" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="1.5">
+    Studio Automation Workshop
+  </text>
+
+  <!-- Event Subtitle / Description -->
+  <text x="450" y="342" fill="#D4AF37" font-family="'Montserrat', sans-serif" font-size="11" font-style="italic" text-anchor="middle" letter-spacing="0.5">
+    Pneumatic & Industrial Studio Automation Workshop in Association with Janatics India Pvt. Ltd.
+  </text>
+
+  <!-- Organizing Institution -->
+  <text x="450" y="385" fill="#E8DFD8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="1.2">
+    ORGANIZED BY: DEPARTMENT OF MECHANICAL ENGINEERING, MCET & JANATICS INDIA PVT. LTD.
+  </text>
+
+  <!-- Official Badge Pill -->
+  <rect x="350" y="415" width="200" height="26" rx="13" fill="#14110E" stroke="#D4AF37" stroke-width="1.5"/>
+  <circle cx="365" cy="428" r="4" fill="#D4AF37"/>
+  <text x="454" y="432" fill="#D4AF37" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="1.8">
+    JANATICS INDUSTRY COLLAB
+  </text>
+
+  <!-- Bottom Divider -->
+  <line x1="80" y1="470" x2="820" y2="470" stroke="#D4AF37" stroke-opacity="0.18" stroke-width="1"/>
+
+  <!-- Left Signatory / Date -->
+  <text x="140" y="515" fill="#E8DFD8" font-family="'Cinzel', serif" font-size="12" font-weight="600" text-anchor="middle">
+    17 September 2026
+  </text>
+  <line x1="70" y1="525" x2="210" y2="525" stroke="#8C6D4F" stroke-width="1"/>
+  <text x="140" y="542" fill="#A8988B" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle" letter-spacing="1.5">
+    OFFICIAL DATE
+  </text>
+
+  <!-- Center Metallic Seal -->
+  <circle cx="450" cy="520" r="32" fill="#14110E" stroke="url(#goldGrad)" stroke-width="2"/>
+  <circle cx="450" cy="520" r="26" fill="none" stroke="#D4AF37" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <circle cx="450" cy="520" r="20" fill="url(#sealGrad)" opacity="0.25"/>
+  <!-- Star icon inside seal -->
+  <polygon points="450,506 454,516 464,517 456,523 459,533 450,527 441,533 444,523 436,517 446,516" fill="#D4AF37"/>
+  <text x="450" y="570" fill="#D4AF37" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="middle" letter-spacing="1.5">
+    JANATICS · MCET MECH
+  </text>
+
+  <!-- Right Signatory / Authority -->
+  <text x="760" y="515" fill="#E8DFD8" font-family="'Cinzel', serif" font-size="12" font-weight="600" text-anchor="middle">
+    VERIFIED RECORD
+  </text>
+  <line x1="690" y1="525" x2="830" y2="525" stroke="#8C6D4F" stroke-width="1"/>
+  <text x="760" y="542" fill="#A8988B" font-family="'JetBrains Mono', monospace" font-size="9" text-anchor="middle" letter-spacing="1.5">
+    ACADEMIC SYMPOSIA
+  </text>
+
+  <!-- Watermark code -->
+  <text x="860" y="582" fill="#D4AF37" fill-opacity="0.3" font-family="'JetBrains Mono', monospace" font-size="8" text-anchor="end" letter-spacing="1">
+    DOC ID: GP-CERT-2025/2026-MCET
+  </text>
+</svg>

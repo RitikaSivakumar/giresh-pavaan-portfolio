@@ -10,9 +10,10 @@ import { Navbar } from './components/Navbar.tsx';
 import { Hero } from './components/Hero.tsx';
 import { KineticTicker } from './components/KineticTicker.tsx';
 import { About } from './components/About.tsx';
-import { KinematicsShowcase } from './components/KinematicsShowcase.tsx';
 import { Projects } from './components/Projects.tsx';
+import { EarlyEvProject } from './components/EarlyEvProject.tsx';
 import { Skills } from './components/Skills.tsx';
+import { Achievements } from './components/Achievements.tsx';
 import { Journey } from './components/Journey.tsx';
 import { Gallery } from './components/Gallery.tsx';
 import { Contact } from './components/Contact.tsx';
@@ -34,7 +35,7 @@ export default function App() {
 
   // Scroll spy to highlight active section in Navbar
   useEffect(() => {
-    const sectionIds = ['home', 'about', 'kinematics', 'projects', 'skills', 'journey', 'gallery', 'contact'];
+    const sectionIds = ['home', 'about', 'projects', 'ev-conversion', 'skills', 'achievements', 'journey', 'gallery', 'contact'];
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 250;
       for (const id of sectionIds) {
@@ -61,14 +62,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-[#07111F] text-[#F1F5F9] selection:bg-[#3B82F6] selection:text-white overflow-x-hidden font-sans">
+    <div className="min-h-screen w-full flex flex-col bg-black text-[#E8DFD8] selection:bg-[#D4AF37] selection:text-black overflow-x-hidden font-sans">
       {/* 1. Cinematic Session-Persisted Introduction with skip option */}
       <CinematicIntro />
 
       {/* 2. Precision Custom Cursor for Desktop Fine Pointers */}
       <CustomCursor />
 
-      {/* 3. Electric Blue Scroll Progress Line & Floating Back-To-Top Button */}
+      {/* 3. Antique Gold Scroll Progress Line & Floating Back-To-Top Button */}
       <ScrollProgress />
 
       {/* 4. Cinematic Top Navigation with Live Visitor Clock & Greeting */}
@@ -87,22 +88,25 @@ export default function App() {
         {/* 2. 01 / About the Engineer */}
         <About />
 
-        {/* 3. 02 / Interactive 3D Kinematics Rotor Assembly */}
-        <KinematicsShowcase />
-
-        {/* 4. 03 / Selected Project Concepts & Schematics */}
+        {/* 3. 02 / Selected Project Concepts & Schematics */}
         <Projects onSelectProject={(project) => setSelectedProject(project)} />
+
+        {/* 4. 03 / Early Electric Vehicle Conversion Project (Hands-On Engineering 2019–2023) */}
+        <EarlyEvProject />
 
         {/* 5. 04 / Technical Arsenal Bento Grid */}
         <Skills />
 
-        {/* 6. 05 / Academic & Analytical Journey */}
+        {/* 6. 05 / Achievements & Certifications Gallery */}
+        <Achievements />
+
+        {/* 7. 06 / Academic & Analytical Journey */}
         <Journey />
 
-        {/* 7. Editorial Photo Gallery (All 5 verified photos, NO expand/fullscreen controls) */}
+        {/* 8. Editorial Photo Gallery (All 5 verified photos, NO expand/fullscreen controls) */}
         <Gallery />
 
-        {/* 8. 06 / Direct Contact & Transmission */}
+        {/* 9. 07 / Direct Contact & Transmission */}
         <Contact linkedinUrl={linkedinUrl} />
       </main>
 

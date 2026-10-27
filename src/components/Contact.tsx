@@ -61,59 +61,60 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
   };
 
   return (
-    <section id="contact" className="py-24 lg:py-32 relative bg-[#07111F] border-t border-[#243B53] overflow-hidden">
-      {/* Background radial blue glow */}
-      <div className="absolute top-1/2 right-10 w-96 h-96 bg-[#3B82F6]/6 rounded-full blur-[160px] pointer-events-none" />
+    <section id="contact" className="py-16 sm:py-20 lg:py-24 relative bg-[#0B0B0D] border-t border-[#D4AF37]/20 overflow-hidden">
+      {/* Background radial gold glow & subtle blue accent */}
+      <div className="absolute top-1/2 right-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#24B8FF]/4 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
         {/* Section Header */}
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-sm border border-[#243B53] bg-[#10243A] text-[11px] font-mono text-[#60A5FA] tracking-[0.25em] uppercase shadow-xs">
-            <span className="w-1.5 h-1.5 bg-[#3B82F6] rounded-full shadow-[0_0_6px_#3B82F6]" />
-            06 / CONTACT
+        <div className="space-y-3 max-w-3xl">
+          <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-sm border border-[#D4AF37]/30 bg-[#111318] text-[11px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase">
+            <span className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
+            08 / TRANSMISSION & INQUIRY
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#F1F5F9] uppercase tracking-tight leading-[1.05]">
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-[#E8DFD8] uppercase tracking-tight leading-[1.05]">
             LET&apos;S BUILD{' '}
-            <span className="font-serif italic font-normal text-gradient-electric">
+            <span className="font-serif italic font-normal text-gradient-gold">
               SOMETHING MEANINGFUL.
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base lg:text-lg text-[#A7B4C7] leading-relaxed font-sans">
+          <p className="text-sm sm:text-base lg:text-lg text-[#A8988B] leading-relaxed font-sans">
             Have an internship opportunity, academic collaboration, or mechanical inquiry? I am always eager to connect with engineering professionals, professors, and mentors.
           </p>
         </div>
 
         {/* Content Layout */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-stretch">
-          {/* Left Column: Direct Info Card (~5 cols) */}
-          <div className="lg:col-span-5 p-7 sm:p-8 rounded-sm bg-[#0B192B] border border-[#243B53] shadow-[0_15px_40px_rgba(7,17,31,0.9)] relative flex flex-col justify-between space-y-6">
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
+          {/* Left Column: Direct Info Card (~5 cols) - natural content height */}
+          <div className="lg:col-span-5 p-6 sm:p-7 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative flex flex-col gap-4">
             {/* Corner accents */}
-            <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#3B82F6]" />
-            <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#3B82F6]" />
-            <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#3B82F6]" />
-            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#3B82F6]" />
+            <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#D4AF37]" />
+            <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#D4AF37]" />
+            <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#D4AF37]" />
+            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#D4AF37]" />
 
             <div className="space-y-6">
-              <h3 className="font-serif text-xl sm:text-2xl text-[#F1F5F9] uppercase font-normal tracking-wide pb-4 border-b border-[#243B53]">
+              <h3 className="font-serif text-xl sm:text-2xl text-[#E8DFD8] uppercase font-normal tracking-wide pb-4 border-b border-[#D4AF37]/20">
                 DIRECT CHANNELS
               </h3>
 
               {/* Email */}
               <div className="space-y-1.5">
-                <span className="text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5 text-[#3B82F6]" />
+                <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
+                  <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Email Inquiries</span>
                 </span>
-                <p className="font-mono text-sm text-[#F1F5F9] break-all">
+                <p className="font-mono text-sm text-[#E8DFD8] break-all">
                   {PERSONAL_INFO.email}
                 </p>
                 <button
                   type="button"
                   onClick={handleCopyEmail}
                   data-cursor-text="COPY"
-                  className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-xs bg-[#10243A] border border-[#3B82F6]/40 text-[10px] font-mono text-[#60A5FA] hover:bg-[#3B82F6] hover:text-[#07111F] transition-colors cursor-pointer shadow-xs"
+                  className="mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-xs bg-[#10233F]/70 border border-[#24B8FF]/40 text-[10px] font-mono text-[#24B8FF] hover:bg-[#24B8FF] hover:text-black transition-colors cursor-pointer"
                 >
                   {isCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                   <span>{isCopied ? 'COPIED TO CLIPBOARD' : 'COPY EMAIL'}</span>
@@ -121,35 +122,35 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               {/* Phone */}
-              <div className="space-y-1.5 pt-4 border-t border-[#243B53]/70">
-                <span className="text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5 text-[#3B82F6]" />
+              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+                <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Telephone</span>
                 </span>
                 <a
                   href={`tel:${PERSONAL_INFO.phone}`}
                   data-cursor-text="CALL"
-                  className="font-mono text-sm text-[#F1F5F9] hover:text-[#60A5FA] transition-colors block"
+                  className="font-mono text-sm text-[#E8DFD8] hover:text-[#24B8FF] transition-colors block"
                 >
                   {PERSONAL_INFO.phone}
                 </a>
               </div>
 
               {/* Location */}
-              <div className="space-y-1.5 pt-4 border-t border-[#243B53]/70">
-                <span className="text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#3B82F6]" />
+              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+                <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Location & Postal</span>
                 </span>
-                <p className="text-xs text-[#F1F5F9] leading-relaxed font-sans">
+                <p className="text-xs text-[#E8DFD8] leading-relaxed font-sans">
                   {PERSONAL_INFO.address}
                 </p>
               </div>
 
               {/* Professional LinkedIn */}
-              <div className="space-y-1.5 pt-4 border-t border-[#243B53]/70">
-                <span className="text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider flex items-center gap-2">
-                  <Linkedin className="w-3.5 h-3.5 text-[#3B82F6]" />
+              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+                <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
+                  <Linkedin className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Professional Network</span>
                 </span>
                 <a
@@ -157,7 +158,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor-text="LINKEDIN"
-                  className="inline-flex items-center gap-2 text-xs font-mono text-[#60A5FA] hover:text-[#22D3EE] hover:underline"
+                  className="inline-flex items-center gap-2 text-xs font-mono text-[#D4AF37] hover:text-[#24B8FF] transition-colors"
                 >
                   <span>Connect on LinkedIn</span>
                   <ExternalLink className="w-3 h-3" />
@@ -165,30 +166,30 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
             </div>
 
-            {/* Live Interactive Status Indicator */}
-            <div className="p-3.5 rounded-xs bg-[#10243A] border border-[#243B53] flex flex-col gap-1.5 text-[11px] font-mono shadow-xs">
-              <div className="flex items-center gap-2 text-[#22D3EE]">
+            {/* Live Interactive Status Indicator with Blue Accent */}
+            <div className="p-3.5 rounded-xs bg-[#10233F]/85 border border-[#24B8FF]/40 flex flex-col gap-1.5 text-[11px] font-mono">
+              <div className="flex items-center gap-2 text-[#24B8FF]">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22D3EE] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#22D3EE] shadow-[0_0_6px_#22D3EE]" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#24B8FF] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#24B8FF]" />
                 </span>
                 <span className="font-semibold tracking-wider">CHANNEL ACTIVE</span>
               </div>
-              <span className="text-[#A7B4C7] text-[10px]">
+              <span className="text-[#A8988B] text-[10px]">
                 Direct inbox monitored for academic and technical inquiries.
               </span>
             </div>
           </div>
 
           {/* Right Column: Transmission / Contact Form (~7 cols) */}
-          <div className="lg:col-span-7 p-7 sm:p-8 rounded-sm bg-[#0B192B] border border-[#243B53] shadow-[0_15px_40px_rgba(7,17,31,0.9)] relative">
-            <h3 className="font-serif text-xl sm:text-2xl text-[#F1F5F9] uppercase font-normal tracking-wide pb-4 border-b border-[#243B53]">
+          <div className="lg:col-span-7 p-7 sm:p-8 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative">
+            <h3 className="font-serif text-xl sm:text-2xl text-[#E8DFD8] uppercase font-normal tracking-wide pb-4 border-b border-[#D4AF37]/20">
               SEND A TRANSMISSION
             </h3>
 
             {isSent && (
-              <div className="my-4 p-4 rounded-xs bg-[#10243A] border border-[#3B82F6] text-xs font-mono text-[#60A5FA] flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#22D3EE]" />
+              <div className="my-4 p-4 rounded-xs bg-[#10233F]/80 border border-[#24B8FF] text-xs font-mono text-[#24B8FF] flex items-center gap-2">
+                <Check className="w-4 h-4 text-[#24B8FF]" />
                 <span>Email client opened with formatted transmission. You may proceed to send!</span>
               </div>
             )}
@@ -196,7 +197,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
             <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider mb-2">
+                  <label className="block text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider mb-2">
                     YOUR FULL NAME *
                   </label>
                   <input
@@ -204,7 +205,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Dr. Rajesh Kumar"
-                    className="w-full px-4 py-3 rounded-xs bg-[#10243A] border border-[#243B53] focus:border-[#3B82F6] focus:outline-hidden text-sm text-[#F1F5F9] placeholder-[#A7B4C7]/40 font-sans"
+                    className="w-full px-4 py-3 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/25 focus:border-[#24B8FF] focus:ring-1 focus:ring-[#24B8FF]/40 focus:outline-hidden text-sm text-[#E8DFD8] placeholder-[#706458] font-sans transition-colors"
                   />
                   {errors.name && (
                     <p className="mt-1 text-[10px] font-mono text-red-400">{errors.name}</p>
@@ -212,7 +213,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider mb-2">
+                  <label className="block text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider mb-2">
                     EMAIL ADDRESS *
                   </label>
                   <input
@@ -220,7 +221,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="name@organization.com"
-                    className="w-full px-4 py-3 rounded-xs bg-[#10243A] border border-[#243B53] focus:border-[#3B82F6] focus:outline-hidden text-sm text-[#F1F5F9] placeholder-[#A7B4C7]/40 font-sans"
+                    className="w-full px-4 py-3 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/25 focus:border-[#24B8FF] focus:ring-1 focus:ring-[#24B8FF]/40 focus:outline-hidden text-sm text-[#E8DFD8] placeholder-[#706458] font-sans transition-colors"
                   />
                   {errors.email && (
                     <p className="mt-1 text-[10px] font-mono text-red-400">{errors.email}</p>
@@ -229,7 +230,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider mb-2">
+                <label className="block text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider mb-2">
                   SUBJECT *
                 </label>
                 <input
@@ -237,7 +238,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                   placeholder="Internship / CAD Collaboration / Project Inquiry"
-                  className="w-full px-4 py-3 rounded-xs bg-[#10243A] border border-[#243B53] focus:border-[#3B82F6] focus:outline-hidden text-sm text-[#F1F5F9] placeholder-[#A7B4C7]/40 font-sans"
+                  className="w-full px-4 py-3 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/25 focus:border-[#24B8FF] focus:ring-1 focus:ring-[#24B8FF]/40 focus:outline-hidden text-sm text-[#E8DFD8] placeholder-[#706458] font-sans transition-colors"
                 />
                 {errors.subject && (
                   <p className="mt-1 text-[10px] font-mono text-red-400">{errors.subject}</p>
@@ -245,7 +246,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono text-[#22D3EE] uppercase tracking-wider mb-2">
+                <label className="block text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider mb-2">
                   TRANSMISSION MESSAGE *
                 </label>
                 <textarea
@@ -253,21 +254,22 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Share details regarding your inquiry, technical challenge, or internship role..."
-                  className="w-full px-4 py-3 rounded-xs bg-[#10243A] border border-[#243B53] focus:border-[#3B82F6] focus:outline-hidden text-sm text-[#F1F5F9] placeholder-[#A7B4C7]/40 font-sans resize-none"
+                  className="w-full px-4 py-3 rounded-xs bg-[#0B0B0D] border border-[#D4AF37]/25 focus:border-[#24B8FF] focus:ring-1 focus:ring-[#24B8FF]/40 focus:outline-hidden text-sm text-[#E8DFD8] placeholder-[#706458] font-sans resize-none transition-colors"
                 />
                 {errors.message && (
                   <p className="mt-1 text-[10px] font-mono text-red-400">{errors.message}</p>
                 )}
               </div>
 
+              {/* Gold Button with Magnetic Hover */}
               <Magnetic strength={0.15} className="w-full">
                 <button
                   type="submit"
                   data-cursor-text="TRANSMIT"
-                  className="w-full py-4 px-6 rounded-xs bg-[#3B82F6] hover:bg-[#60A5FA] text-[#07111F] font-mono text-xs tracking-[0.2em] font-bold uppercase transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]"
+                  className="btn-gold w-full py-4 px-6 rounded-xs font-mono text-xs tracking-[0.2em] font-bold uppercase transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]"
                 >
                   <span>TRANSMIT MESSAGE</span>
-                  <Send className="w-4 h-4 text-[#07111F]" />
+                  <Send className="w-4 h-4 text-black" />
                 </button>
               </Magnetic>
             </form>
