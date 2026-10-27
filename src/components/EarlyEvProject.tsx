@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Zap,
   Wrench,
@@ -24,7 +24,6 @@ interface EvPhoto {
   title: string;
   caption: string;
   phase: string;
-  aspect: string;
 }
 
 const EV_PHOTOS: EvPhoto[] = [
@@ -35,7 +34,6 @@ const EV_PHOTOS: EvPhoto[] = [
     title: 'Street Road Trial & Operational Run',
     caption: 'Giresh Pavaan conducting an outdoor test ride on the converted green two-wheeler chassis, validating mechanical balance and drivetrain operation.',
     phase: 'Road Trial · 2019–2023',
-    aspect: 'aspect-[9/16] sm:aspect-[4/5] lg:aspect-[3/4]',
   },
   {
     id: 'ev-workshop-assembly',
@@ -44,7 +42,6 @@ const EV_PHOTOS: EvPhoto[] = [
     title: 'Hands-On Fabrication & Assembly',
     caption: 'Component mounting, electrical wiring routing, sprocket alignment, and practical mechanical troubleshooting in the home workshop.',
     phase: 'Fabrication & Integration',
-    aspect: 'aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4]',
   },
 ];
 
@@ -83,6 +80,30 @@ const FOCUS_AREAS = [
 
 export const EarlyEvProject: React.FC = () => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+  const [failedPhotos, setFailedPhotos] = useState<Set<string>>(() => new Set());
+  const touchStartX = useRef<number | null>(null);
+
+  const handlePhotoError = (photo: EvPhoto, image: HTMLImageElement) => {
+    if (image.dataset.fallbackAttempted !== 'true') {
+      image.dataset.fallbackAttempted = 'true';
+      image.src = photo.fallbackSrc;
+      return;
+    }
+    setFailedPhotos((previous) => new Set(previous).add(photo.id));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.changedTouches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const startX = touchStartX.current;
+    const endX = e.changedTouches[0]?.clientX;
+    touchStartX.current = null;
+    if (startX === null || endX === undefined || Math.abs(endX - startX) < 50) return;
+    if (endX < startX) showNext();
+    else showPrev();
+  };
 
   const openLightbox = (index: number) => {
     setSelectedPhotoIndex(index);
@@ -124,7 +145,7 @@ export const EarlyEvProject: React.FC = () => {
   return (
     <section
       id="ev-conversion"
-      className="relative py-24 sm:py-32 bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden text-[#E8DFD8]"
+      className="relative py-16 sm:py-20 bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden text-[#E8DFD8]"
     >
       {/* Blueprint grid background */}
       <div
@@ -142,7 +163,7 @@ export const EarlyEvProject: React.FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         {/* Section Header */}
-        <div className="mb-14 sm:mb-20 text-center max-w-3xl mx-auto">
+        <div className="mb-10 sm:mb-12 text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#111318] border border-[#D4AF37]/35 text-[#D4AF37] text-xs font-mono tracking-wider mb-5">
             <Zap className="w-3.5 h-3.5 text-[#24B8FF] animate-pulse" />
             <span>03 / EARLY ENGINEERING SPOTLIGHT · 2019 – SEPTEMBER 2023</span>
@@ -166,9 +187,9 @@ export const EarlyEvProject: React.FC = () => {
         </div>
 
         {/* Hero Card: Two-Column Showcase (Editorial Narrative + 2 Authentic Photographs) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start mb-10">
           {/* Left Column: Authentic Project Narrative & Core Engineering Genesis */}
-          <div className="lg:col-span-5 flex flex-col justify-between bg-[#0B0B0D] border border-[#D4AF37]/25 rounded-sm p-6 sm:p-8 relative shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
+          <div className="interactive-card lg:col-span-5 flex flex-col bg-[#0B0B0D] border border-[#D4AF37]/25 rounded-sm p-5 sm:p-6 relative shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
             {/* Corner accents */}
             <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37]" />
             <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37]" />
@@ -176,7 +197,7 @@ export const EarlyEvProject: React.FC = () => {
             <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37]" />
 
             <div>
-              <div className="flex items-center justify-between border-b border-[#D4AF37]/15 pb-4 mb-6">
+              <div className="flex items-center justify-between border-b border-[#D4AF37]/15 pb-3 mb-4">
                 <span className="text-xs font-mono text-[#D4AF37] tracking-widest uppercase flex items-center gap-2">
                   <Activity className="w-3.5 h-3.5 text-[#24B8FF]" /> FOUNDATIONAL GENESIS
                 </span>
@@ -186,13 +207,13 @@ export const EarlyEvProject: React.FC = () => {
               </div>
 
               {/* Exact user-provided description */}
-              <div className="relative pl-4 border-l-2 border-[#D4AF37]/60 mb-6">
+              <div className="relative pl-4 border-l-2 border-[#D4AF37]/60 mb-4">
                 <p className="text-base sm:text-lg leading-relaxed text-[#E8DFD8]/95 font-sans font-light">
                   &ldquo;This project represents an early hands-on engineering journey focused on converting a conventional two-wheeler into an electric vehicle. The work involved exploring an electric conversion using the existing vehicle chassis, understanding the arrangement of electrical and mechanical components, and working toward an affordable conversion concept. This early experience helped develop an interest in mechanical systems, electric mobility, practical engineering, and vehicle modification.&rdquo;
                 </p>
               </div>
 
-              <div className="space-y-3 pt-2">
+              <div className="space-y-3 pt-1">
                 <p className="text-xs uppercase font-mono tracking-widest text-[#A8988B]">Key Engineering Milestones:</p>
                 <ul className="space-y-2.5 text-xs text-[#C5B8AC] font-sans">
                   <li className="flex items-start gap-2">
@@ -211,34 +232,45 @@ export const EarlyEvProject: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-mono text-[#A8988B]">
+            <div className="mt-5 pt-4 border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-mono text-[#A8988B]">
               <span>VERIFIED ORIGINAL PHOTOGRAPHS</span>
               <span className="text-[#D4AF37]">CLICK PHOTO TO ENLARGE</span>
             </div>
           </div>
 
           {/* Right Column: 2 Authentic Uploaded Photographs with interactive viewer */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5 items-stretch">
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
             {EV_PHOTOS.map((photo, idx) => (
               <div
                 key={photo.id}
                 onClick={() => openLightbox(idx)}
-                className="group relative bg-[#111318] border border-[#D4AF37]/25 hover:border-[#D4AF37] transition-all duration-500 rounded-sm overflow-hidden flex flex-col justify-between cursor-pointer shadow-[0_15px_40px_rgba(0,0,0,0.8)]"
+                data-sound="transition"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openLightbox(idx);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Open ${photo.title} photograph fullscreen`}
+                style={{ '--reveal-index': idx } as React.CSSProperties}
+                className="interactive-card reveal-card group relative bg-[#111318] border border-[#D4AF37]/25 hover:border-[#D4AF37] transition-all duration-500 rounded-sm overflow-hidden flex flex-col cursor-pointer shadow-[0_15px_40px_rgba(0,0,0,0.8)]"
               >
                 {/* Photo container */}
-                <div className={`relative w-full ${photo.aspect} overflow-hidden bg-black`}>
-                  <img
+                <div className="relative w-full overflow-hidden bg-black">
+                  {failedPhotos.has(photo.id) ? (
+                    <div className="p-5 text-center text-xs font-mono text-[#D4AF37]" role="img" aria-label={`${photo.title} photograph unavailable`}>
+                      PHOTOGRAPH UNAVAILABLE
+                    </div>
+                  ) : <img
                     src={photo.src}
                     alt={photo.title}
-                    onError={(e) => {
-                      // Fallback to direct asset path if needed
-                      if (e.currentTarget.src !== photo.fallbackSrc) {
-                        e.currentTarget.src = photo.fallbackSrc;
-                      }
-                    }}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    onError={(e) => handlePhotoError(photo, e.currentTarget)}
+                    className="block w-full h-auto transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     loading="lazy"
-                  />
+                    decoding="async"
+                  />}
 
                   {/* Gradient overlay for readability */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-60 transition-opacity duration-300" />
@@ -262,11 +294,11 @@ export const EarlyEvProject: React.FC = () => {
                 </div>
 
                 {/* Card Description */}
-                <div className="p-4 bg-[#0B0B0D] border-t border-[#D4AF37]/15">
+                <div className="p-3 sm:p-4 bg-[#0B0B0D] border-t border-[#D4AF37]/15">
                   <p className="text-xs text-[#A8988B] leading-relaxed line-clamp-3">
                     {photo.caption}
                   </p>
-                  <div className="mt-3 flex items-center justify-between text-[11px] font-mono text-[#24B8FF]">
+                  <div className="mt-2 flex items-center justify-between text-[11px] font-mono text-[#24B8FF]">
                     <span>PHOTO 0{idx + 1} OF 02</span>
                     <span className="text-[#D4AF37] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                       VIEW FULLSCREEN &rarr;
@@ -341,6 +373,8 @@ export const EarlyEvProject: React.FC = () => {
           role="dialog"
           aria-modal="true"
           onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-200"
         >
           {/* Close Button */}
@@ -375,16 +409,14 @@ export const EarlyEvProject: React.FC = () => {
             className="relative max-w-4xl max-h-[90vh] w-full flex flex-col items-center bg-[#0B0B0D] border border-[#D4AF37]/35 rounded-sm overflow-hidden shadow-2xl"
           >
             <div className="w-full max-h-[70vh] flex items-center justify-center bg-black/80 overflow-hidden">
-              <img
+              {failedPhotos.has(EV_PHOTOS[selectedPhotoIndex].id) ? (
+                <div className="p-6 text-center text-sm font-mono text-[#D4AF37]">PHOTOGRAPH UNAVAILABLE</div>
+              ) : <img
                 src={EV_PHOTOS[selectedPhotoIndex].src}
                 alt={EV_PHOTOS[selectedPhotoIndex].title}
-                onError={(e) => {
-                  if (e.currentTarget.src !== EV_PHOTOS[selectedPhotoIndex].fallbackSrc) {
-                    e.currentTarget.src = EV_PHOTOS[selectedPhotoIndex].fallbackSrc;
-                  }
-                }}
+                onError={(e) => handlePhotoError(EV_PHOTOS[selectedPhotoIndex], e.currentTarget)}
                 className="max-h-[70vh] w-auto max-w-full object-contain"
-              />
+              />}
             </div>
 
             {/* Modal Caption Footer */}

@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Clock } from 'lucide-react';
+import { Menu, X, Clock, Volume2, VolumeX, Sparkles, Sparkle } from 'lucide-react';
 import { playCinemaChime } from './EngineeringVisuals.tsx';
 import { Magnetic } from './Magnetic.tsx';
+import { readInterfaceSoundPreference, setInterfaceSoundEnabled, setInterfaceVolume } from '../lib/interfaceSound.ts';
 
 interface NavbarProps {
   activeSection: string;
+  motionEnabled: boolean;
+  onToggleMotion: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ activeSection, motionEnabled, onToggleMotion }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [timeString, setTimeString] = useState('');
   const [greeting, setGreeting] = useState('WELCOME');
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    return readInterfaceSoundPreference();
+  });
+  const [soundVolume, setSoundVolume] = useState(() => {
+    try {
+      const saved = Number(window.localStorage.getItem('portfolio-sound-volume'));
+      return Number.isFinite(saved) && saved > 0 && saved <= 1 ? saved : 0.45;
+    } catch { return 0.45; }
+  });
+
+  const toggleSound = () => {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    setInterfaceSoundEnabled(next);
+  };
 
   // Live Digital Clock & Time-based Greeting
   useEffect(() => {
@@ -66,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
     setIsMobileMenuOpen(false);
     const targetElement = document.querySelector(href);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
+      targetElement.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     }
   };
 
@@ -142,14 +160,76 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                 CONNECT
               </a>
             </Magnetic>
+
+            <button
+              type="button"
+              onClick={onToggleMotion}
+              aria-label={motionEnabled ? 'Turn decorative animations off' : 'Turn decorative animations on'}
+              aria-pressed={motionEnabled}
+              title={motionEnabled ? 'Decorative motion on' : 'Decorative motion off'}
+              className="inline-flex items-center gap-2 rounded-xs border border-[#D4AF37]/35 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[#A8988B] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24B8FF]"
+            >
+              {motionEnabled ? <Sparkles className="h-3.5 w-3.5" /> : <Sparkle className="h-3.5 w-3.5" />}
+              <span>{motionEnabled ? 'MOTION ON' : 'MOTION OFF'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleSound}
+              aria-label={soundEnabled ? 'Turn interface sounds off' : 'Turn interface sounds on'}
+              aria-pressed={soundEnabled}
+              title={soundEnabled ? 'Sound on' : 'Sound off'}
+              className="inline-flex items-center gap-2 rounded-xs border border-[#D4AF37]/35 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[#A8988B] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24B8FF]"
+            >
+              {soundEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+              <span>{soundEnabled ? 'SOUND ON' : 'SOUND OFF'}</span>
+            </button>
+            <label title={`Interface volume ${Math.round(soundVolume * 100)} percent`} className="inline-flex items-center gap-1 text-[#A8988B]">
+              <Volume2 className="h-3 w-3 text-[#D4AF37]" />
+              <input
+                type="range"
+                min="0.05"
+                max="1"
+                step="0.05"
+                value={soundVolume}
+                aria-label="Interface sound volume"
+                onChange={(event) => {
+                  const next = Number(event.currentTarget.value);
+                  setSoundVolume(next);
+                  setInterfaceVolume(next);
+                }}
+                className="w-12 accent-[#D4AF37]"
+              />
+            </label>
           </nav>
 
           {/* Mobile hamburger button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              type="button"
+              onClick={onToggleMotion}
+              aria-label={motionEnabled ? 'Turn decorative animations off' : 'Turn decorative animations on'}
+              aria-pressed={motionEnabled}
+              title={motionEnabled ? 'Decorative motion on' : 'Decorative motion off'}
+              className="inline-flex items-center gap-1.5 rounded-xs border border-[#D4AF37]/35 px-2 py-2 text-[9px] font-mono uppercase tracking-wider text-[#A8988B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24B8FF]"
+            >
+              {motionEnabled ? <Sparkles className="h-3.5 w-3.5" /> : <Sparkle className="h-3.5 w-3.5" />}
+              <span>{motionEnabled ? 'MOTION' : 'STATIC'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleSound}
+              aria-label={soundEnabled ? 'Turn interface sounds off' : 'Turn interface sounds on'}
+              aria-pressed={soundEnabled}
+              title={soundEnabled ? 'Sound on' : 'Sound off'}
+              className="inline-flex items-center gap-1.5 rounded-xs border border-[#D4AF37]/35 px-2 py-2 text-[9px] font-mono uppercase tracking-wider text-[#A8988B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24B8FF]"
+            >
+              {soundEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+              <span>{soundEnabled ? 'ON' : 'SOUND'}</span>
+            </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle navigation menu"
-              className="p-2 text-[#D4AF37] hover:text-white transition-colors focus:outline-hidden"
+              className="p-2 text-[#D4AF37] hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24B8FF]"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -184,6 +264,23 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
             })}
 
             <div className="pt-2">
+              <label className="mb-3 flex items-center justify-between rounded-xs border border-[#D4AF37]/20 bg-[#111318] px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-[#A8988B]">
+                <span className="flex items-center gap-2"><Volume2 className="h-3.5 w-3.5 text-[#D4AF37]" /> SOUND LEVEL</span>
+                <input
+                  type="range"
+                  min="0.05"
+                  max="1"
+                  step="0.05"
+                  value={soundVolume}
+                  aria-label="Interface sound volume"
+                  onChange={(event) => {
+                    const next = Number(event.currentTarget.value);
+                    setSoundVolume(next);
+                    setInterfaceVolume(next);
+                  }}
+                  className="w-24 accent-[#D4AF37]"
+                />
+              </label>
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}

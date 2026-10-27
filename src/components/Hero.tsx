@@ -303,7 +303,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreWorld, onViewProjects }) =>
           className="flex flex-col items-center gap-1.5 text-[10px] font-mono text-[#A8988B] hover:text-[#D4AF37] transition-colors cursor-pointer group"
         >
           <span className="tracking-[0.25em] uppercase">SCROLL TO EXPLORE</span>
-          <ChevronDown className="w-4 h-4 text-[#D4AF37] animate-bounce" />
+          <ChevronDown className="w-4 h-4 text-[#D4AF37] float-gold" />
         </button>
       </div>
 

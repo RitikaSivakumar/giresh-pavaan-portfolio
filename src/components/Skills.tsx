@@ -24,7 +24,7 @@ export const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="py-24 lg:py-32 relative bg-[#0B0B0D] border-t border-[#D4AF37]/20 overflow-hidden select-none">
+    <section id="skills" className="py-16 sm:py-20 lg:py-24 relative bg-[#0B0B0D] border-t border-[#D4AF37]/20 overflow-hidden select-none">
       {/* Background radial gold & blue glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-[#D4AF37]/3 rounded-full blur-[180px] pointer-events-none" />
       <div className="absolute top-1/3 right-10 w-80 h-80 bg-[#24B8FF]/4 rounded-full blur-[140px] pointer-events-none" />
@@ -56,7 +56,7 @@ export const Skills: React.FC = () => {
         </motion.div>
 
         {/* Bento Grid Layout */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-7 items-start">
           {SKILL_CATEGORIES.map((category, catIdx) => {
             const isWide = category.id === 'technical';
             const isTechnical = category.id === 'technical';
@@ -69,7 +69,7 @@ export const Skills: React.FC = () => {
                 transition={{ duration: 0.5, delay: catIdx * 0.1 }}
                 className={`${
                   isWide ? 'lg:col-span-12 xl:col-span-12' : 'lg:col-span-6'
-                } p-6 sm:p-8 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative group flex flex-col justify-between`}
+                } p-5 sm:p-6 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative group flex flex-col`}
               >
                 {/* Corner Metallic Clips */}
                 <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#D4AF37]" />
@@ -79,7 +79,7 @@ export const Skills: React.FC = () => {
 
                 <div>
                   {/* Category Header */}
-                  <div className="flex items-center justify-between pb-6 border-b border-[#D4AF37]/20">
+                  <div className="flex items-center justify-between pb-4 border-b border-[#D4AF37]/20">
                     <div className="flex items-center gap-3">
                       <div className={`p-2.5 rounded-xs border ${
                         isTechnical
@@ -104,11 +104,11 @@ export const Skills: React.FC = () => {
 
                   {/* Skills Grid within Category */}
                   <div
-                    className={`mt-6 grid grid-cols-1 ${
+                    className={`mt-4 grid grid-cols-1 ${
                       isWide
                         ? 'sm:grid-cols-2 lg:grid-cols-4'
                         : 'sm:grid-cols-2'
-                    } gap-4`}
+                    } gap-3`}
                   >
                     {category.skills.map((skill, skillIdx) => {
                       const isHovered = hoveredSkill === skill.name;
@@ -125,7 +125,7 @@ export const Skills: React.FC = () => {
                             playCinemaChime();
                           }}
                           onMouseLeave={() => setHoveredSkill(null)}
-                          className={`p-4 rounded-xs transition-all duration-300 border flex flex-col justify-between min-h-[140px] cursor-pointer ${
+                          className={`p-3 rounded-xs transition-all duration-300 border flex flex-col gap-3 cursor-pointer ${
                             isHovered
                               ? 'bg-[#181B22] border-[#D4AF37] shadow-[0_5px_20px_rgba(212,175,55,0.18)] -translate-y-1'
                               : 'bg-[#0B0B0D] border-[#D4AF37]/15 hover:border-[#D4AF37]/45'
@@ -148,7 +148,7 @@ export const Skills: React.FC = () => {
                             </p>
                           </div>
 
-                          <div className="pt-3 border-t border-[#D4AF37]/10 flex items-center justify-between text-[10px] font-mono text-[#A8988B]">
+                          <div className="pt-2 border-t border-[#D4AF37]/10 flex items-center justify-between text-[10px] font-mono text-[#A8988B]">
                             <span className="flex items-center gap-1.5">
                               {category.id === 'interests' ? (
                                 <Sparkles className="w-3 h-3 text-[#D4AF37]" />
@@ -172,7 +172,7 @@ export const Skills: React.FC = () => {
                 </div>
 
                 {/* Category Footnote */}
-                <div className="mt-6 pt-4 border-t border-[#D4AF37]/10 flex items-center justify-between text-xs font-mono text-[#A8988B]">
+                <div className="mt-4 pt-3 border-t border-[#D4AF37]/10 flex items-center justify-between text-xs font-mono text-[#A8988B]">
                   <span>
                     {category.id === 'interests'
                       ? 'Athletic discipline & mechanical balance'

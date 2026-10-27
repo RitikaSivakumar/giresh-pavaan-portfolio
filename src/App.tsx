@@ -19,11 +19,22 @@ import { Gallery } from './components/Gallery.tsx';
 import { Contact } from './components/Contact.tsx';
 import { Footer } from './components/Footer.tsx';
 import { ProjectModal } from './components/ProjectModal.tsx';
-import { CustomCursor } from './components/CustomCursor.tsx';
 import { ScrollProgress } from './components/ScrollProgress.tsx';
 import { CinematicIntro } from './components/CinematicIntro.tsx';
+import { SparkCursor } from './components/SparkCursor.tsx';
+import { ClickSpark } from './components/ClickSpark.tsx';
+import { SoundManager } from './components/SoundManager.tsx';
 
 export default function App() {
+  const [motionEnabled, setMotionEnabled] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    try {
+      return window.sessionStorage.getItem('portfolio-motion-enabled') !== 'false';
+    } catch {
+      return true;
+    }
+  });
   // Active section tracking for navbar
   const [activeSection, setActiveSection] = useState<string>('home');
 
@@ -34,6 +45,39 @@ export default function App() {
   const linkedinUrl = PERSONAL_INFO.linkedinUrl;
 
   // Scroll spy to highlight active section in Navbar
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches || !motionEnabled;
+    const sections = Array.from(document.querySelectorAll('main > section'));
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+
+    sections.forEach((section) => section.classList.add('section-reveal'));
+    document.body.classList.add('section-reveal-enabled');
+    const observer = new IntersectionObserver((entries, activeObserver) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        activeObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove('section-reveal-enabled');
+      sections.forEach((section) => section.classList.remove('section-reveal', 'is-visible'));
+    };
+  }, [motionEnabled]);
+
+  useEffect(() => {
+    document.body.classList.toggle('decorative-motion-off', !motionEnabled);
+    try {
+      window.sessionStorage.setItem('portfolio-motion-enabled', String(motionEnabled));
+    } catch {
+      // The preference remains active for this page even when storage is unavailable.
+    }
+    return () => document.body.classList.remove('decorative-motion-off');
+  }, [motionEnabled]);
+
   useEffect(() => {
     const sectionIds = ['home', 'about', 'projects', 'ev-conversion', 'skills', 'achievements', 'journey', 'gallery', 'contact'];
     const handleScroll = () => {
@@ -58,7 +102,7 @@ export default function App() {
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   };
 
   return (
@@ -67,13 +111,15 @@ export default function App() {
       <CinematicIntro />
 
       {/* 2. Precision Custom Cursor for Desktop Fine Pointers */}
-      <CustomCursor />
+      <SparkCursor motionEnabled={motionEnabled} />
+      <ClickSpark />
+      <SoundManager />
 
       {/* 3. Antique Gold Scroll Progress Line & Floating Back-To-Top Button */}
       <ScrollProgress />
 
       {/* 4. Cinematic Top Navigation with Live Visitor Clock & Greeting */}
-      <Navbar activeSection={activeSection} />
+      <Navbar activeSection={activeSection} motionEnabled={motionEnabled} onToggleMotion={() => setMotionEnabled((enabled) => !enabled)} />
 
       <main className="flex-1 w-full overflow-x-hidden">
         {/* 1. Cinematic Fullscreen Hero */}
@@ -104,7 +150,7 @@ export default function App() {
         <Journey />
 
         {/* 8. Editorial Photo Gallery (All 5 verified photos, NO expand/fullscreen controls) */}
-        <Gallery />
+        <Gallery motionEnabled={motionEnabled} />
 
         {/* 9. 07 / Direct Contact & Transmission */}
         <Contact linkedinUrl={linkedinUrl} />

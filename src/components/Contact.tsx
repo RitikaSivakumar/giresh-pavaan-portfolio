@@ -61,7 +61,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
   };
 
   return (
-    <section id="contact" className="py-16 sm:py-20 lg:py-24 relative bg-[#0B0B0D] border-t border-[#D4AF37]/20 overflow-hidden">
+    <section id="contact" className="py-14 sm:py-16 lg:py-20 relative bg-[#0B0B0D] border-t border-[#D4AF37]/20 overflow-hidden">
       {/* Background radial gold glow & subtle blue accent */}
       <div className="absolute top-1/2 right-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#24B8FF]/4 rounded-full blur-[140px] pointer-events-none" />
@@ -87,16 +87,16 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
         </div>
 
         {/* Content Layout */}
-        <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
           {/* Left Column: Direct Info Card (~5 cols) - natural content height */}
-          <div className="lg:col-span-5 p-6 sm:p-7 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative flex flex-col gap-4">
+          <div className="interactive-card lg:col-span-5 p-5 sm:p-6 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative flex flex-col gap-4">
             {/* Corner accents */}
             <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t-2 border-l-2 border-[#D4AF37]" />
             <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-[#D4AF37]" />
             <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-[#D4AF37]" />
             <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b-2 border-r-2 border-[#D4AF37]" />
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <h3 className="font-serif text-xl sm:text-2xl text-[#E8DFD8] uppercase font-normal tracking-wide pb-4 border-b border-[#D4AF37]/20">
                 DIRECT CHANNELS
               </h3>
@@ -122,7 +122,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               {/* Phone */}
-              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+              <div className="space-y-1.5 pt-3 border-t border-[#D4AF37]/15">
                 <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Telephone</span>
@@ -137,7 +137,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               {/* Location */}
-              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+              <div className="space-y-1.5 pt-3 border-t border-[#D4AF37]/15">
                 <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Location & Postal</span>
@@ -148,7 +148,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
 
               {/* Professional LinkedIn */}
-              <div className="space-y-1.5 pt-4 border-t border-[#D4AF37]/15">
+              <div className="space-y-1.5 pt-3 border-t border-[#D4AF37]/15">
                 <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider flex items-center gap-2">
                   <Linkedin className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>Professional Network</span>
@@ -182,7 +182,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
           </div>
 
           {/* Right Column: Transmission / Contact Form (~7 cols) */}
-          <div className="lg:col-span-7 p-7 sm:p-8 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative">
+          <div className="interactive-card lg:col-span-7 p-6 sm:p-7 rounded-sm bg-[#111318] border border-[#D4AF37]/25 shadow-[0_15px_40px_rgba(0,0,0,0.85)] relative">
             <h3 className="font-serif text-xl sm:text-2xl text-[#E8DFD8] uppercase font-normal tracking-wide pb-4 border-b border-[#D4AF37]/20">
               SEND A TRANSMISSION
             </h3>
@@ -194,7 +194,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider mb-2">

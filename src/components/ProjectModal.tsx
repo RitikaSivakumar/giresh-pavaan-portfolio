@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import { X, CheckCircle2, Compass, AlertCircle, Wrench, Sparkles } from 'lucide-react';
 import { Project } from '../types/index.ts';
-import {
-  CadComponentVisual,
-  MechanicalSystemVisual,
-  AutomotiveSystemVisual,
-  ManufacturingProcessVisual,
-  playCinemaChime,
-} from './EngineeringVisuals.tsx';
+import { playCinemaChime } from './EngineeringVisuals.tsx';
+
+const ProjectSimulation = React.lazy(() =>
+  import('./ProjectSimulation.tsx').then((module) => ({ default: module.ProjectSimulation }))
+);
 
 interface ProjectModalProps {
   project: Project | null;
@@ -30,31 +28,6 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
   }, [project, onClose]);
 
   if (!project) return null;
-
-  const renderVisual = () => {
-    if (project.customImage) {
-      return (
-        <img
-          src={project.customImage}
-          alt={project.title}
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-cover"
-        />
-      );
-    }
-    switch (project.id) {
-      case 'proj-01':
-        return <CadComponentVisual className="h-full w-full" />;
-      case 'proj-02':
-        return <MechanicalSystemVisual className="h-full w-full" />;
-      case 'proj-03':
-        return <AutomotiveSystemVisual className="h-full w-full" />;
-      case 'proj-04':
-        return <ManufacturingProcessVisual className="h-full w-full" />;
-      default:
-        return <CadComponentVisual className="h-full w-full" />;
-    }
-  };
 
   return (
     <div
@@ -90,6 +63,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               playCinemaChime();
               onClose();
             }}
+            data-sound="transition"
             aria-label="Close modal"
             className="p-1.5 rounded-xs text-[#A8988B] hover:text-[#D4AF37] hover:bg-[#14110E] transition-colors cursor-pointer"
           >
@@ -99,17 +73,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
         {/* Modal Body */}
         <div className="p-6 sm:p-8 space-y-7">
-          {/* Visual Schematic */}
-          <div className="relative aspect-video w-full rounded-xs bg-[#050505] overflow-hidden border border-[#D4AF37]/20 shadow-inner">
-            {renderVisual()}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-transparent to-transparent opacity-75 pointer-events-none" />
-            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-[#D4AF37]">
-              <span>TECHNICAL BLUEPRINT VIEW</span>
-              <span className="px-2 py-0.5 bg-[#14110E]/95 rounded-xs border border-[#D4AF37]/50 text-[#D4AF37] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
-                {project.status}
-              </span>
-            </div>
+          {/* Same interactive model used in the project card; no static blueprint fallback. */}
+          <div className="rounded-xs bg-[#050505] overflow-hidden border border-[#D4AF37]/20 shadow-inner">
+            <React.Suspense fallback={<div className="flex h-52 sm:h-60 items-center justify-center bg-[#090b0e] text-[10px] font-mono tracking-wider text-[#A8988B]">LOADING INTERACTIVE MODEL</div>}>
+              <ProjectSimulation projectId={project.id} />
+            </React.Suspense>
           </div>
 
           {/* Title and Full Description */}

@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GALLERY_PHOTOS } from '../data/portfolioData.ts';
 import { GalleryPhoto } from '../types/index.ts';
-import { Camera, X, ChevronLeft, ChevronRight, ExternalLink, RefreshCw, Eye } from 'lucide-react';
+import { Camera, X, ChevronLeft, ChevronRight, ExternalLink, Eye } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion, type Variants } from 'motion/react';
 import { playCinemaChime } from './EngineeringVisuals.tsx';
 
-export const Gallery: React.FC = () => {
+export const Gallery: React.FC<{ motionEnabled?: boolean }> = ({ motionEnabled = true }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [swirlKey, setSwirlKey] = useState<number>(0);
-  const shouldReduceMotion = useReducedMotion();
+  const [failedImages, setFailedImages] = useState<Set<string>>(() => new Set());
+  const touchStartX = useRef<number | null>(null);
+  const shouldReduceMotion = useReducedMotion() || !motionEnabled;
 
   const openLightbox = (photo: GalleryPhoto, index: number) => {
     setSelectedPhoto(photo);
@@ -50,20 +51,17 @@ export const Gallery: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhoto, selectedIndex]);
 
-  // Object position fine-tuning to preserve original proportions and avoid cropping faces
-  const getObjectPosition = (id: string) => {
-    switch (id) {
-      case 'photo-checkered-outdoor':
-        return 'center 12%';
-      case 'photo-perspective-balcony':
-        return 'center 14%';
-      case 'photo-studio-headshot':
-        return 'center 10%';
-      case 'photo-executive-blazer':
-        return 'center 16%';
-      default:
-        return 'center 15%';
-    }
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.changedTouches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const startX = touchStartX.current;
+    const endX = e.changedTouches[0]?.clientX;
+    touchStartX.current = null;
+    if (startX === null || endX === undefined || Math.abs(endX - startX) < 50) return;
+    if (endX < startX) showNext();
+    else showPrev();
   };
 
   // 3D spiral / swirl entrance animation calculation for each card
@@ -117,7 +115,7 @@ export const Gallery: React.FC = () => {
   return (
     <section
       id="gallery"
-      className="py-24 lg:py-32 relative bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden select-none"
+      className="py-16 lg:py-20 relative bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden select-none"
     >
       {/* Background radial gold glow & subtle electric blue technical accent */}
       <div className="absolute top-1/3 left-10 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[160px] pointer-events-none" />
@@ -126,7 +124,7 @@ export const Gallery: React.FC = () => {
 
       <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#D4AF37]/20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-8 border-b border-[#D4AF37]/20">
           <div className="space-y-4 max-w-3xl">
             <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-sm border border-[#D4AF37]/30 bg-[#111318] text-[11px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase font-bold">
               <Camera className="w-3.5 h-3.5 text-[#D4AF37]" />
@@ -145,39 +143,24 @@ export const Gallery: React.FC = () => {
             </p>
           </div>
 
-          {/* Interactive Replay 3D Swirl & Collection Metadata */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                setSwirlKey((prev) => prev + 1);
-                playCinemaChime();
-              }}
-              data-cursor-text="REPLAY"
-              className="py-3 px-4 rounded-xs border border-[#D4AF37]/40 bg-[#14110E] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-black font-mono text-[11px] tracking-widest uppercase font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-xs hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>REPLAY 3D SWIRL</span>
-            </button>
-
-            <div className="shrink-0 p-3.5 rounded-xs bg-[#111318] border border-[#D4AF37]/30 text-right">
-              <span className="text-[10px] font-mono text-[#D4AF37] uppercase tracking-widest block">
-                PHOTOGRAPHS
-              </span>
-              <span className="font-serif text-lg text-[#E8DFD8]">
-                {String(GALLERY_PHOTOS.length).padStart(2, '0')} VERIFIED IMAGES
-              </span>
-            </div>
+          {/* Collection Metadata */}
+          <div className="shrink-0 self-end md:self-auto p-3.5 rounded-xs bg-[#111318] border border-[#D4AF37]/30 text-right">
+            <span className="text-[10px] font-mono text-[#D4AF37] uppercase tracking-widest block">
+              PHOTOGRAPHS
+            </span>
+            <span className="font-serif text-lg text-[#E8DFD8]">
+              {String(GALLERY_PHOTOS.length).padStart(2, '0')} VERIFIED IMAGES
+            </span>
           </div>
         </div>
 
         {/* 3D Perspective Stage Container */}
         <div
-          key={swirlKey}
           style={{ perspective: '1600px' }}
-          className="mt-14"
+          className="mt-8"
         >
           {/* Responsive 4-Column Balanced Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-7 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5 items-start">
             {GALLERY_PHOTOS.map((photo, idx) => {
               const spiral = getSpiralVariant(idx);
               return (
@@ -199,6 +182,16 @@ export const Gallery: React.FC = () => {
                         }
                   }
                   onClick={() => openLightbox(photo, idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      openLightbox(photo, idx);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  data-sound="transition"
+                  aria-label={`Open ${photo.title} fullscreen`}
                   style={{ transformStyle: 'preserve-3d' }}
                   data-cursor-text="EXPAND"
                   className="group relative rounded-sm bg-[#111318] border border-[#D4AF37]/25 hover:border-[#D4AF37] transition-all duration-500 overflow-hidden shadow-[0_15px_45px_rgba(0,0,0,0.85)] hover:shadow-[0_25px_60px_-15px_rgba(212,175,55,0.3)] flex flex-col justify-between cursor-pointer"
@@ -209,21 +202,22 @@ export const Gallery: React.FC = () => {
                   <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37] z-20" />
                   <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37] z-20" />
 
-                  {/* Portrait Frame with Native Aspect Ratio */}
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#070709]">
+                  {/* Natural image dimensions preserve each uploaded photograph's aspect ratio. */}
+                  <div className="relative w-full overflow-hidden bg-[#070709]">
+                    {failedImages.has(photo.id) ? (
+                      <div className="p-5 text-center text-xs font-mono text-[#D4AF37]" role="img" aria-label={`${photo.title} image unavailable`}>
+                        IMAGE UNAVAILABLE · {photo.filename}
+                      </div>
+                    ) : (
                     <img
                       src={photo.src}
-                      alt={`Photograph 0${idx + 1}`}
-                      loading="eager"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (photo.fallbackSrc && target.src !== photo.fallbackSrc) {
-                          target.src = photo.fallbackSrc;
-                        }
-                      }}
-                      style={{ objectPosition: getObjectPosition(photo.id) }}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-104 filter contrast-[1.02]"
+                      alt={photo.title}
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => setFailedImages((previous) => new Set(previous).add(photo.id))}
+                      className="block w-full h-auto transition-transform duration-700 group-hover:scale-[1.02] filter contrast-[1.02]"
                     />
+                    )}
 
                     {/* Gradient overlay for text contrast */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/30 pointer-events-none" />
@@ -245,14 +239,17 @@ export const Gallery: React.FC = () => {
                   </div>
 
                   {/* Clean, Non-Fictional Bottom Bar */}
-                  <div className="p-4 bg-[#111318] border-t border-[#D4AF37]/15 flex items-center justify-between text-xs font-mono">
-                    <span className="text-[#E8DFD8] font-semibold tracking-wider">
-                      PHOTOGRAPH 0{idx + 1}
-                    </span>
-                    <span className="text-[#A8988B] group-hover:text-[#D4AF37] transition-colors flex items-center gap-1 text-[11px]">
-                      <span>EXPAND</span>
-                      <ExternalLink className="w-3 h-3 text-[#D4AF37]" />
-                    </span>
+                  <div className="p-3 sm:p-4 bg-[#111318] border-t border-[#D4AF37]/15">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#E8DFD8]">{photo.title}</h3>
+                        <p className="mt-1 text-xs leading-relaxed text-[#A8988B]">{photo.description}</p>
+                      </div>
+                      <span className="shrink-0 text-[#A8988B] group-hover:text-[#D4AF37] transition-colors flex items-center gap-1 text-[11px] font-mono">
+                        <span>EXPAND</span>
+                        <ExternalLink className="w-3 h-3 text-[#D4AF37]" />
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -265,8 +262,13 @@ export const Gallery: React.FC = () => {
       <AnimatePresence>
         {selectedPhoto && (
           <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Photograph viewer"
             className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 backdrop-blur-xl p-3 sm:p-6 md:p-8 animate-fade-in"
             onClick={closeLightbox}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             {/* Modal Container */}
             <motion.div
@@ -305,6 +307,7 @@ export const Gallery: React.FC = () => {
                   </span>
                   <button
                     onClick={closeLightbox}
+                    data-sound="transition"
                     aria-label="Close Lightbox"
                     className="p-1.5 rounded-xs border border-[#D4AF37]/30 hover:border-[#D4AF37] text-[#A8988B] hover:text-[#D4AF37] transition-all cursor-pointer"
                   >
@@ -314,26 +317,26 @@ export const Gallery: React.FC = () => {
               </div>
 
               {/* Main Image Stage */}
-              <div className="relative flex-1 bg-[#050505] p-2 sm:p-4 flex items-center justify-center overflow-hidden min-h-[360px] sm:min-h-[460px] max-h-[64vh]">
-                <motion.img
+              <div className="relative flex-1 bg-[#050505] p-2 sm:p-4 flex items-center justify-center overflow-hidden max-h-[64vh]">
+                {failedImages.has(selectedPhoto.id) ? (
+                  <div className="p-6 text-center text-sm font-mono text-[#D4AF37]" role="img" aria-label={`${selectedPhoto.title} image unavailable`}>
+                    IMAGE UNAVAILABLE · {selectedPhoto.filename}
+                  </div>
+                ) : <motion.img
                   key={selectedPhoto.id}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.25 }}
                   src={selectedPhoto.src}
                   alt={`Photograph 0${selectedIndex + 1}`}
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    if (selectedPhoto.fallbackSrc && target.src !== selectedPhoto.fallbackSrc) {
-                      target.src = selectedPhoto.fallbackSrc;
-                    }
-                  }}
+                  onError={() => setFailedImages((previous) => new Set(previous).add(selectedPhoto.id))}
                   className="max-w-full max-h-[58vh] object-contain filter contrast-[1.02] drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
-                />
+                />}
 
                 {/* Previous Button */}
                 <button
                   onClick={showPrev}
+                  data-sound="transition"
                   aria-label="Previous Photograph"
                   className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xs bg-black/85 hover:bg-[#D4AF37] hover:text-black border border-[#D4AF37]/50 text-[#D4AF37] transition-all cursor-pointer shadow-xl z-20"
                 >
@@ -343,6 +346,7 @@ export const Gallery: React.FC = () => {
                 {/* Next Button */}
                 <button
                   onClick={showNext}
+                  data-sound="transition"
                   aria-label="Next Photograph"
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-xs bg-black/85 hover:bg-[#D4AF37] hover:text-black border border-[#D4AF37]/50 text-[#D4AF37] transition-all cursor-pointer shadow-xl z-20"
                 >
@@ -372,7 +376,7 @@ export const Gallery: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Filmstrip selector: all 4 portraits */}
+                {/* Filmstrip selector for all gallery photographs */}
                 <div className="flex items-center gap-2 overflow-x-auto">
                   {GALLERY_PHOTOS.map((p, idx) => (
                     <button
@@ -388,18 +392,16 @@ export const Gallery: React.FC = () => {
                           : 'border-[#D4AF37]/20 hover:border-[#D4AF37]/60 opacity-60 hover:opacity-100'
                       }`}
                     >
-                      <img
-                        src={p.src}
-                        alt={`Thumbnail 0${idx + 1}`}
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          if (p.fallbackSrc && target.src !== p.fallbackSrc) {
-                            target.src = p.fallbackSrc;
-                          }
-                        }}
-                        style={{ objectPosition: getObjectPosition(p.id) }}
-                        className="w-full h-full object-cover"
-                      />
+                      {failedImages.has(p.id) ? (
+                        <span className="flex h-full w-full items-center justify-center text-[8px] font-mono text-[#D4AF37]">MISSING</span>
+                      ) : (
+                        <img
+                          src={p.src}
+                          alt={`Thumbnail 0${idx + 1}`}
+                          onError={() => setFailedImages((previous) => new Set(previous).add(p.id))}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                     </button>
                   ))}
                 </div>

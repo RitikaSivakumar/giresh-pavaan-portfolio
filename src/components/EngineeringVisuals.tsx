@@ -310,34 +310,8 @@ export const ManufacturingProcessVisual: React.FC<{ className?: string }> = ({ c
   </svg>
 );
 
-/**
- * Golden chime for tactile interactive feedback (Web Audio API)
- */
+/** Compatibility helper for keyboard-driven transitions; pointer sounds are delegated globally. */
+import { hasRecentInterfacePointer, playInterfaceSound } from '../lib/interfaceSound.ts';
 export const playCinemaChime = () => {
-  try {
-    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const now = ctx.currentTime;
-
-    // Harmonic frequencies in warm golden spectrum (C minor 9th shimmer)
-    const freqs = [523.25, 783.99, 1046.5, 1318.51];
-    freqs.forEach((f, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(f, now);
-      
-      const initialGain = 0.04 / (idx + 1);
-      gain.gain.setValueAtTime(initialGain, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55 + idx * 0.12);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.85);
-    });
-  } catch {
-    // Audio context may be restricted before user gesture
-  }
+  if (!hasRecentInterfacePointer()) playInterfaceSound('transition');
 };

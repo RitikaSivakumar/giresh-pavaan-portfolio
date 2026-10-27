@@ -2,15 +2,14 @@ import React, { useState, useRef } from 'react';
 import { Project } from '../types/index.ts';
 import { PROJECTS_DATA } from '../data/portfolioData.ts';
 import {
-  CadComponentVisual,
-  MechanicalSystemVisual,
-  AutomotiveSystemVisual,
-  ManufacturingProcessVisual,
   playCinemaChime,
 } from './EngineeringVisuals.tsx';
 import { CheckCircle, ArrowUpRight } from 'lucide-react';
 import { Magnetic } from './Magnetic.tsx';
-import { KinematicGearShowcase } from './KinematicGearShowcase.tsx';
+
+const ProjectSimulation = React.lazy(() =>
+  import('./ProjectSimulation.tsx').then((module) => ({ default: module.ProjectSimulation }))
+);
 
 interface ProjectsProps {
   onSelectProject: (project: Project) => void;
@@ -21,18 +20,28 @@ const ProjectCard: React.FC<{
   project: Project;
   onSelect: (p: Project) => void;
   renderVisual: (id: string) => React.ReactNode;
-}> = ({ project, onSelect, renderVisual }) => {
+  revealIndex: number;
+}> = ({ project, onSelect, renderVisual, revealIndex }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (!cardRef.current) return;
+    if (e.target instanceof HTMLElement && e.target.closest('[data-project-simulation]')) {
+      cardRef.current.classList.remove('is-pointer-active');
+      setTilt({ x: 0, y: 0 });
+      return;
+    }
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
+    cardRef.current.style.setProperty('--pointer-x', `${(x / rect.width) * 100}%`);
+    cardRef.current.style.setProperty('--pointer-y', `${(y / rect.height) * 100}%`);
+    cardRef.current.classList.add('is-pointer-active');
     // subtle 3D tilt angles (-5deg to +5deg)
     const rotateX = ((y - centerY) / centerY) * -5;
     const rotateY = ((x - centerX) / centerX) * 5;
@@ -40,6 +49,7 @@ const ProjectCard: React.FC<{
   };
 
   const handleMouseLeave = () => {
+    cardRef.current?.classList.remove('is-pointer-active');
     setIsHovered(false);
     setTilt({ x: 0, y: 0 });
   };
@@ -56,8 +66,9 @@ const ProjectCard: React.FC<{
           isHovered ? 1.01 : 1
         }, ${isHovered ? 1.01 : 1}, 1)`,
         transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out',
-      }}
-      className="group relative rounded-sm bg-[#111318] border border-[#D4AF37]/25 hover:border-[#D4AF37] transition-colors duration-500 overflow-hidden shadow-[0_15px_45px_rgba(0,0,0,0.85)] flex flex-col justify-between"
+        '--reveal-index': revealIndex,
+      } as React.CSSProperties}
+      className="interactive-card reveal-card group relative rounded-sm bg-[#111318] border border-[#D4AF37]/25 hover:border-[#D4AF37] transition-colors duration-500 overflow-hidden shadow-[0_15px_45px_rgba(0,0,0,0.85)] flex flex-col justify-between"
     >
       {/* Corner Accents */}
       <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37] z-10" />
@@ -129,13 +140,14 @@ const ProjectCard: React.FC<{
       </div>
 
       {/* Bottom Action Footer with Magnetic Button */}
-      <div className="p-6 sm:p-8 pt-0 mt-4">
+      <div className="p-6 sm:p-8 pt-0 mt-2">
         <Magnetic strength={0.15} className="w-full">
           <button
             onClick={() => {
               playCinemaChime();
               onSelect(project);
             }}
+            data-sound="transition"
             data-cursor-text="OPEN"
             className="w-full py-3.5 px-4 rounded-xs border border-[#D4AF37]/35 bg-[#14110E] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-black font-mono text-xs tracking-[0.15em] uppercase font-bold transition-all duration-300 flex items-center justify-center gap-2 group/btn cursor-pointer shadow-xs hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
           >
@@ -165,24 +177,17 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
       : PROJECTS_DATA.filter((p) => p.category === activeCategory);
 
   const renderVisual = (id: string) => {
-    switch (id) {
-      case 'proj-01':
-        return <CadComponentVisual className="h-48 sm:h-56 md:h-64 object-cover" />;
-      case 'proj-02':
-        return <MechanicalSystemVisual className="h-48 sm:h-56 md:h-64 object-cover" />;
-      case 'proj-03':
-        return <AutomotiveSystemVisual className="h-48 sm:h-56 md:h-64 object-cover" />;
-      case 'proj-04':
-        return <ManufacturingProcessVisual className="h-48 sm:h-56 md:h-64 object-cover" />;
-      default:
-        return <CadComponentVisual className="h-48 sm:h-56 md:h-64 object-cover" />;
-    }
+    return (
+      <React.Suspense fallback={<div className="flex h-52 sm:h-60 items-center justify-center bg-[#090b0e] text-[10px] font-mono tracking-wider text-[#A8988B]">LOADING INTERACTIVE MODEL</div>}>
+        <ProjectSimulation projectId={id} />
+      </React.Suspense>
+    );
   };
 
   return (
     <section
       id="projects"
-      className="py-24 lg:py-32 relative bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden"
+      className="py-16 lg:py-20 relative bg-[#050505] border-t border-[#D4AF37]/20 overflow-hidden"
     >
       {/* Background Gold Ambient */}
       <div className="absolute top-1/3 right-0 w-96 h-96 bg-[#D4AF37]/5 rounded-full blur-[150px] pointer-events-none" />
@@ -190,7 +195,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
 
       <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#D4AF37]/20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 pb-8 border-b border-[#D4AF37]/20">
           <div className="space-y-4 max-w-3xl">
             <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-sm border border-[#D4AF37]/30 bg-[#111318] text-[11px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase">
               <span className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
@@ -223,7 +228,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-2 pt-8 pb-12">
+        <div className="flex flex-wrap items-center gap-2 pt-6 pb-8">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -244,13 +249,14 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
         </div>
 
         {/* Projects Grid with Interactive 3D Tilt Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
-          {filteredProjects.map((project) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-7">
+          {filteredProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
               onSelect={onSelectProject}
               renderVisual={renderVisual}
+              revealIndex={index}
             />
           ))}
         </div>
