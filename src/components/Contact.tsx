@@ -69,6 +69,16 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
       <div className="w-full px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
         {/* Section Header */}
         <div className="space-y-3 max-w-3xl">
+          <div className="mb-1 flex items-center gap-2.5 text-[9px] font-mono uppercase tracking-[0.22em] text-[#A8988B]">
+            <span className="contact-core-mark" aria-hidden="true">
+              <svg viewBox="0 0 18 18">
+                <circle className="contact-core-ring" cx="9" cy="9" r="7.4" />
+                <circle className="contact-core-ring" cx="9" cy="9" r="5.2" />
+                <circle className="contact-core-ring" cx="9" cy="9" r="2.8" />
+              </svg>
+            </span>
+            <span>CORE / FINAL ASSEMBLY</span>
+          </div>
           <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-sm border border-[#D4AF37]/30 bg-[#111318] text-[11px] font-mono text-[#D4AF37] tracking-[0.25em] uppercase">
             <span className="w-1.5 h-1.5 bg-[#D4AF37] rounded-full" />
             08 / TRANSMISSION & INQUIRY
@@ -130,7 +140,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                 <a
                   href={`tel:${PERSONAL_INFO.phone}`}
                   data-cursor-text="CALL"
-                  className="font-mono text-sm text-[#E8DFD8] hover:text-[#24B8FF] transition-colors block"
+                  className="contact-link-sweep font-mono text-sm text-[#E8DFD8] hover:text-[#24B8FF] transition-colors block"
                 >
                   {PERSONAL_INFO.phone}
                 </a>
@@ -158,7 +168,7 @@ export const Contact: React.FC<ContactProps> = ({ linkedinUrl }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cursor-text="LINKEDIN"
-                  className="inline-flex items-center gap-2 text-xs font-mono text-[#D4AF37] hover:text-[#24B8FF] transition-colors"
+                  className="contact-link-sweep inline-flex items-center gap-2 text-xs font-mono text-[#D4AF37] hover:text-[#24B8FF] transition-colors"
                 >
                   <span>Connect on LinkedIn</span>
                   <ExternalLink className="w-3 h-3" />

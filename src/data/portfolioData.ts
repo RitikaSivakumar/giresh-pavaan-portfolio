@@ -10,7 +10,7 @@ export const PERSONAL_INFO = {
   degree: 'B.E. Mechanical Engineering',
   batch: '2025–2029',
   graduationYear: '2029',
-  email: 'gireshpavaansk@gmail.com',
+  email: 'pavaangiresh260@gmail.com',
   phone: '+91 8344581524',
   location: 'Pollachi, Coimbatore, Tamil Nadu, India',
   postalCode: '642003',

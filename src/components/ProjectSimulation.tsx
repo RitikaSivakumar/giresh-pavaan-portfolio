@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Maximize2, Minimize2, Pause, Play, RotateCcw, ZoomIn, ZoomOut, Layers } from 'lucide-react';
+import { playInterfaceSound } from '../lib/interfaceSound.ts';
 
 type SimulationId = 'proj-01' | 'proj-02' | 'proj-03' | 'proj-04';
 
@@ -13,6 +14,11 @@ function extrude(shape: THREE.Shape, depth: number, material: THREE.Material) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
+  return mesh;
+}
+
+function labelMesh<T extends THREE.Mesh>(mesh: T, label: string): T {
+  mesh.userData.componentLabel = label;
   return mesh;
 }
 
@@ -35,7 +41,7 @@ function createPlate(root: THREE.Group, materials: THREE.Material[]) {
     hole.absarc(x, y, r, 0, Math.PI * 2, true);
     shape.holes.push(hole);
   });
-  const part = extrude(shape, 0.28, materials[0]);
+  const part = labelMesh(extrude(shape, 0.28, materials[0]), 'Mounting plate · central bore and four mounting holes');
   root.add(part);
 }
 
@@ -70,15 +76,15 @@ function createGearTrain(root: THREE.Group, materials: THREE.Material[], moving:
   // The tooth counts are geometry proportions for this illustrative kinematics view.
   const large = new THREE.Group();
   large.position.x = -0.61;
-  large.add(createGear(24, 0.72, materials[0]));
+  large.add(labelMesh(createGear(24, 0.72, materials[0]), 'Drive gear'));
   const small = new THREE.Group();
   small.position.x = 0.61;
-  small.add(createGear(16, 0.48, materials[1]));
+  small.add(labelMesh(createGear(16, 0.48, materials[1]), 'Driven gear'));
   [large, small].forEach((gear) => {
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.22, 32), materials[2]);
     hub.rotation.x = Math.PI / 2;
     hub.position.z = 0.08;
-    gear.add(hub);
+    gear.add(labelMesh(hub, 'Gear hub'));
     root.add(gear);
   });
   moving.push(large, small);
@@ -100,17 +106,17 @@ function createBrake(root: THREE.Group, materials: THREE.Material[], moving: THR
     shape.holes.push(hole);
   }
   const rotor = new THREE.Group();
-  rotor.add(extrude(shape, 0.12, materials[0]));
+  rotor.add(labelMesh(extrude(shape, 0.12, materials[0]), 'Brake rotor'));
   const hat = new THREE.Mesh(new THREE.CylinderGeometry(0.43, 0.43, 0.1, 48), materials[1]);
   hat.rotation.x = Math.PI / 2;
   hat.position.z = -0.1;
-  rotor.add(hat);
+  rotor.add(labelMesh(hat, 'Rotor hub'));
   for (let i = 0; i < 12; i += 1) {
     const vane = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.24, 0.08), materials[2]);
     const angle = (i * Math.PI * 2) / 12;
     vane.position.set(Math.cos(angle) * 0.49, Math.sin(angle) * 0.49, 0);
     vane.rotation.z = angle;
-    rotor.add(vane);
+    rotor.add(labelMesh(vane, 'Cooling vane'));
   }
   root.add(rotor);
   moving.push(rotor);
@@ -129,42 +135,42 @@ function createBrake(root: THREE.Group, materials: THREE.Material[], moving: THR
   caliperShape.lineTo(0.88, -0.31);
   caliperShape.lineTo(0.63, -0.31);
   caliperShape.closePath();
-  const caliper = extrude(caliperShape, 0.28, materials[3]);
+  const caliper = labelMesh(extrude(caliperShape, 0.28, materials[3]), 'Brake caliper');
   caliper.position.x = 0.865;
   root.add(caliper);
   [-1, 1].forEach((side) => {
     const pad = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.34, 0.2), materials[4]);
     pad.position.set(0.59, side * 0.24, 0);
-    root.add(pad);
+    root.add(labelMesh(pad, 'Brake pad'));
   });
 }
 
 function createMill(root: THREE.Group, materials: THREE.Material[], moving: THREE.Object3D[]) {
   const bed = new THREE.Mesh(new THREE.BoxGeometry(2.65, 0.14, 1.45), materials[0]);
   bed.position.y = -0.68;
-  root.add(bed);
+  root.add(labelMesh(bed, 'Machine bed'));
   const workpiece = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.46, 0.92), materials[1]);
   workpiece.position.y = -0.36;
-  root.add(workpiece);
+  root.add(labelMesh(workpiece, 'Workpiece'));
   const rail = new THREE.Mesh(new THREE.BoxGeometry(2.35, 0.13, 0.18), materials[2]);
   rail.position.set(0, 0.93, -0.62);
-  root.add(rail);
+  root.add(labelMesh(rail, 'Guide rail'));
   const head = new THREE.Group();
   const housing = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.42, 0.42), materials[2]);
   housing.position.y = 0.62;
-  head.add(housing);
+  head.add(labelMesh(housing, 'Milling head housing'));
   const spindle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.5, 24), materials[3]);
   spindle.position.y = 0.16;
-  head.add(spindle);
+  head.add(labelMesh(spindle, 'Spindle'));
   const cutterGroup = new THREE.Group();
   const cutter = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.36, 16), materials[4]);
   cutter.position.y = -0.27;
-  cutterGroup.add(cutter);
+  cutterGroup.add(labelMesh(cutter, 'Rotating cutter'));
   for (let i = 0; i < 6; i += 1) {
     const flute = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.27, 0.025), materials[5]);
     flute.position.set(i % 2 === 0 ? 0.065 : -0.065, -0.27, i < 3 ? 0.04 : -0.04);
     flute.rotation.z = i * 0.3;
-    cutterGroup.add(flute);
+    cutterGroup.add(labelMesh(flute, 'Cutter flute'));
   }
   head.add(cutterGroup);
   head.position.z = -0.15;
@@ -298,12 +304,15 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
   const wireframeRef = useRef<(enabled: boolean) => void>(() => {});
   const startLoopRef = useRef<() => void>(() => {});
   const stopLoopRef = useRef<() => void>(() => {});
+  const explodedRef = useRef<(enabled: boolean) => void>(() => {});
   const [isPlaying, setIsPlaying] = useState(() => typeof window !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [speed, setSpeed] = useState(1);
   const [wireframe, setWireframe] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [error, setError] = useState(false);
   const [softwareFallback, setSoftwareFallback] = useState(false);
+  const [hoveredComponent, setHoveredComponent] = useState('');
+  const [exploded, setExploded] = useState(false);
   const playingRef = useRef(isPlaying);
   const speedRef = useRef(speed);
 
@@ -335,8 +344,15 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
     let root: THREE.Group;
     let moving: THREE.Object3D[];
     let materials: THREE.Material[] = [];
-  const originalColors = new Map<THREE.Material, THREE.Color>();
-  const originalEmissive = new Map<THREE.MeshStandardMaterial, THREE.Color>();
+    const originalColors = new Map<THREE.Material, THREE.Color>();
+    const originalEmissive = new Map<THREE.MeshStandardMaterial, THREE.Color>();
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    let hoveredMesh: THREE.Mesh | null = null;
+    let selectedMesh: THREE.Mesh | null = null;
+    let highlightedMesh: THREE.Mesh | null = null;
+    let componentOutline: THREE.LineSegments | null = null;
+    let dragMoved = false;
 
     const draw = () => {
       if (disposed || !camera || !scene || !container) return;
@@ -374,6 +390,60 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
         lastFrame = 0;
         frameId = requestAnimationFrame(animate);
       }
+    };
+    const setHoveredMesh = (nextMesh: THREE.Mesh | null) => {
+      hoveredMesh = nextMesh;
+      const activeMesh = nextMesh ?? selectedMesh;
+      const label = activeMesh?.userData.componentLabel;
+      setHoveredComponent(typeof label === 'string' ? label : '');
+      if (highlightedMesh === activeMesh) return;
+      if (componentOutline) {
+        componentOutline.parent?.remove(componentOutline);
+        componentOutline.geometry.dispose();
+        (componentOutline.material as THREE.Material).dispose();
+        componentOutline = null;
+      }
+      if (highlightedMesh) {
+        const oldMats = Array.isArray(highlightedMesh.material) ? highlightedMesh.material : [highlightedMesh.material];
+        oldMats.forEach((material) => {
+          if (material instanceof THREE.MeshStandardMaterial) {
+            material.emissive.copy(wireframeMode ? new THREE.Color(0x4a3200) : originalEmissive.get(material) ?? material.emissive);
+            material.emissiveIntensity = 1;
+          }
+          if (material instanceof THREE.MeshStandardMaterial || material instanceof THREE.MeshBasicMaterial) {
+            material.color.copy(wireframeMode ? new THREE.Color(0xd4af37) : originalColors.get(material) ?? material.color);
+          }
+        });
+      }
+      highlightedMesh = activeMesh;
+      if (activeMesh) {
+        const nextMats = Array.isArray(activeMesh.material) ? activeMesh.material : [activeMesh.material];
+        nextMats.forEach((material) => {
+          if (material instanceof THREE.MeshStandardMaterial) {
+            material.emissive.set(0xffd66e);
+            material.emissiveIntensity = wireframeMode ? 1.35 : 0.8;
+          }
+          if (material instanceof THREE.MeshStandardMaterial || material instanceof THREE.MeshBasicMaterial) {
+            material.color.lerp(new THREE.Color(0xffd66e), wireframeMode ? 0.2 : 0.35);
+          }
+        });
+        componentOutline = new THREE.LineSegments(
+          new THREE.EdgesGeometry(activeMesh.geometry, 18),
+          new THREE.LineBasicMaterial({ color: 0xffd66e, transparent: true, opacity: 0.92, depthTest: false }),
+        );
+        componentOutline.scale.setScalar(1.012);
+        componentOutline.renderOrder = 20;
+        activeMesh.add(componentOutline);
+      }
+      draw();
+    };
+    const updateHoveredMesh = (clientX: number, clientY: number) => {
+      const rect = activeSurface.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(root.children, true).find((entry) => typeof entry.object.userData.componentLabel === 'string');
+      setHoveredMesh(hit ? hit.object as THREE.Mesh : null);
     };
     startLoopRef.current = startLoop;
     stopLoopRef.current = stopLoop;
@@ -451,6 +521,7 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
 
       const onPointerDown = (event: PointerEvent) => {
         dragging = true;
+        dragMoved = false;
         dragX = event.clientX;
         dragY = event.clientY;
         baseX = root.rotation.x;
@@ -458,17 +529,31 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
         activeSurface.setPointerCapture(event.pointerId);
       };
       const onPointerMove = (event: PointerEvent) => {
-        if (!dragging) return;
-        root.rotation.y = baseY + (event.clientX - dragX) * 0.009;
-        root.rotation.x = THREE.MathUtils.clamp(baseX + (event.clientY - dragY) * 0.009, -1.35, 1.35);
-        draw();
+        if (dragging) {
+          if (Math.hypot(event.clientX - dragX, event.clientY - dragY) > 4) dragMoved = true;
+          root.rotation.y = baseY + (event.clientX - dragX) * 0.009;
+          root.rotation.x = THREE.MathUtils.clamp(baseX + (event.clientY - dragY) * 0.009, -1.35, 1.35);
+          draw();
+          return;
+        }
+        updateHoveredMesh(event.clientX, event.clientY);
       };
-      const onPointerUp = () => { dragging = false; };
+      const onPointerUp = () => {
+        if (dragging && !dragMoved && hoveredMesh) {
+          selectedMesh = hoveredMesh;
+          setHoveredMesh(hoveredMesh);
+          playInterfaceSound('model');
+        }
+        dragging = false;
+      };
+      const onPointerCancel = () => { dragging = false; dragMoved = false; };
+      const onPointerLeave = () => { if (!dragging) setHoveredMesh(null); };
       const onWheel = (event: WheelEvent) => {
         event.preventDefault();
         const distance = camera.position.length();
         camera.position.multiplyScalar(THREE.MathUtils.clamp(distance + Math.sign(event.deltaY) * 0.35, 3, 10) / distance);
         camera.lookAt(0, 0, 0);
+        playInterfaceSound('model');
         draw();
       };
       const onVisibility = () => {
@@ -478,12 +563,17 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
       activeSurface.addEventListener('pointerdown', onPointerDown);
       activeSurface.addEventListener('pointermove', onPointerMove);
       activeSurface.addEventListener('pointerup', onPointerUp);
-      activeSurface.addEventListener('pointercancel', onPointerUp);
+      activeSurface.addEventListener('pointercancel', onPointerCancel);
+      activeSurface.addEventListener('pointerleave', onPointerLeave);
       activeSurface.addEventListener('wheel', onWheel, { passive: false });
       document.addEventListener('visibilitychange', onVisibility);
 
       resetRef.current = () => {
         root.rotation.set(0, 0, 0);
+        selectedMesh = null;
+        setHoveredMesh(null);
+        explodedRef.current(false);
+        setExploded(false);
         camera.position.set(0, 1.4, 5.1);
         camera.lookAt(0, 0, 0);
         setSpeed(1);
@@ -508,6 +598,12 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
         });
         draw();
       };
+      explodedRef.current = (enabled) => {
+        if (id !== 'proj-02') return;
+        moving[0].position.x = enabled ? -0.94 : -0.61;
+        moving[1].position.x = enabled ? 0.94 : 0.61;
+        draw();
+      };
       draw();
       startLoop();
 
@@ -516,12 +612,20 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
         stopLoop();
         startLoopRef.current = () => {};
         stopLoopRef.current = () => {};
+        explodedRef.current = () => {};
+        if (componentOutline) {
+          componentOutline.parent?.remove(componentOutline);
+          componentOutline.geometry.dispose();
+          (componentOutline.material as THREE.Material).dispose();
+          componentOutline = null;
+        }
         resizeObserver.disconnect();
         intersectionObserver.disconnect();
         activeSurface.removeEventListener('pointerdown', onPointerDown);
         activeSurface.removeEventListener('pointermove', onPointerMove);
         activeSurface.removeEventListener('pointerup', onPointerUp);
-        activeSurface.removeEventListener('pointercancel', onPointerUp);
+        activeSurface.removeEventListener('pointercancel', onPointerCancel);
+        activeSurface.removeEventListener('pointerleave', onPointerLeave);
         activeSurface.removeEventListener('wheel', onWheel);
         document.removeEventListener('visibilitychange', onVisibility);
         scene.traverse((object) => {
@@ -544,12 +648,24 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
   useEffect(() => { wireframeRef.current(wireframe); }, [wireframe]);
 
   const togglePlayback = useCallback(() => {
+    if (exploded) return;
     const next = !playingRef.current;
     playingRef.current = next;
     setIsPlaying(next);
     if (next) startLoopRef.current();
     else stopLoopRef.current();
-  }, []);
+  }, [exploded]);
+
+  const toggleExploded = () => {
+    const next = !exploded;
+    setExploded(next);
+    explodedRef.current(next);
+    if (next && playingRef.current) {
+      playingRef.current = false;
+      setIsPlaying(false);
+      stopLoopRef.current();
+    }
+  };
 
   return (
     <div
@@ -572,7 +688,7 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
       )}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center justify-between gap-2 bg-gradient-to-t from-black/95 via-black/75 to-transparent px-3 pb-3 pt-8">
         <div className="flex items-center gap-1.5">
-          <button type="button" onClick={togglePlayback} aria-label={isPlaying ? 'Pause simulation' : 'Play simulation'} title={isPlaying ? 'Pause' : 'Play'} className="rounded border border-[#D4AF37]/45 bg-[#111318]/90 p-1.5 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#24B8FF]">
+          <button type="button" onClick={togglePlayback} disabled={exploded} aria-label={exploded ? 'Return to assembled view to play simulation' : isPlaying ? 'Pause simulation' : 'Play simulation'} title={exploded ? 'Assemble gears to play' : isPlaying ? 'Pause' : 'Play'} className="rounded border border-[#D4AF37]/45 bg-[#111318]/90 p-1.5 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#24B8FF]">
             {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
           </button>
           <button type="button" onClick={() => resetRef.current()} aria-label="Reset model view" title="Reset view" className="rounded border border-[#D4AF37]/35 bg-[#111318]/90 p-1.5 text-[#E8DFD8] hover:text-[#D4AF37] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#24B8FF]">
@@ -588,6 +704,7 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
             <Layers className="h-3.5 w-3.5" />
           </button>
         </div>
+        {id === 'proj-02' && <button type="button" onClick={toggleExploded} aria-pressed={exploded} aria-label={exploded ? 'Assemble gear train' : 'Show exploded gear view'} title={exploded ? 'Assemble' : 'Explode'} className={`rounded border px-2 py-1.5 text-[8px] font-mono tracking-wider focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#24B8FF] ${exploded ? 'border-[#D4AF37] bg-[#D4AF37] text-black' : 'border-[#D4AF37]/35 bg-[#111318]/90 text-[#E8DFD8]'}`}>{exploded ? 'ASSEMBLE' : 'EXPLODE'}</button>}
         <label className="flex items-center gap-1.5 text-[9px] font-mono text-[#A8988B]" title="Animation speed">
           SPEED
           <input aria-label="Simulation speed" type="range" min="0.25" max="2" step="0.25" value={speed} onChange={(event) => setSpeed(Number(event.target.value))} className="w-14 accent-[#D4AF37]" />
@@ -597,6 +714,7 @@ export const ProjectSimulation: React.FC<{ projectId: string }> = ({ projectId }
         </button>
       </div>
       <span className="pointer-events-none absolute left-3 top-10 z-[1] text-[9px] font-mono tracking-wider text-[#E8DFD8]/70">{modelLabels[id]} · DRAG TO ROTATE</span>
+      {hoveredComponent && <span role="status" className="pointer-events-none absolute right-3 top-10 z-[1] max-w-[55%] rounded-xs border border-[#D4AF37]/30 bg-black/70 px-2 py-1 text-right text-[9px] font-mono text-[#F5E6B3] shadow-[0_0_14px_rgba(212,175,55,0.14)]">{hoveredComponent}</span>}
     </div>
   );
 };

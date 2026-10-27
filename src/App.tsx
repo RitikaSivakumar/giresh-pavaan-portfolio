@@ -108,7 +108,7 @@ export default function App() {
   return (
     <div className="min-h-screen w-full flex flex-col bg-black text-[#E8DFD8] selection:bg-[#D4AF37] selection:text-black overflow-x-hidden font-sans">
       {/* 1. Cinematic Session-Persisted Introduction with skip option */}
-      <CinematicIntro />
+      <CinematicIntro motionEnabled={motionEnabled} />
 
       {/* 2. Precision Custom Cursor for Desktop Fine Pointers */}
       <SparkCursor motionEnabled={motionEnabled} />

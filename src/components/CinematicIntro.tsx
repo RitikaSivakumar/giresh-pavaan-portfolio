@@ -1,160 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { playCinemaChime } from './EngineeringVisuals.tsx';
+import React, { useEffect, useRef, useState } from 'react';
+import { PERSONAL_INFO } from '../data/portfolioData.ts';
+import { playInterfaceSound } from '../lib/interfaceSound.ts';
 
 interface CinematicIntroProps {
   onComplete?: () => void;
+  motionEnabled?: boolean;
 }
 
-export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete }) => {
+export const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, motionEnabled = true }) => {
   const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
   const [stage, setStage] = useState(0);
+  const dismissTimer = useRef<number | null>(null);
+  const ringTickTimer = useRef<number | null>(null);
+  const sequenceTimers = useRef<number[]>([]);
+
+  const dismiss = () => {
+    if (dismissTimer.current !== null) return;
+    sequenceTimers.current.forEach(window.clearTimeout);
+    sequenceTimers.current = [];
+    if (ringTickTimer.current !== null) window.clearTimeout(ringTickTimer.current);
+    setFading(true);
+    try { window.sessionStorage.setItem('gp_engineering_core_intro_seen', 'true'); } catch { /* Optional session memory. */ }
+    dismissTimer.current = window.setTimeout(() => {
+      setVisible(false);
+      onComplete?.();
+    }, 420);
+  };
 
   useEffect(() => {
-    // Check if intro has already been viewed in this session
-    const seen = sessionStorage.getItem('gp_cinematic_intro_seen');
-    if (seen === 'true') {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion || !motionEnabled) {
+      setVisible(false);
       return;
     }
+    try {
+      if (window.sessionStorage.getItem('gp_engineering_core_intro_seen') === 'true') return;
+    } catch { /* Continue without session storage. */ }
 
     setVisible(true);
-
-    // Sequence timing
-    const t1 = setTimeout(() => setStage(1), 250); // expanding gold line
-    const t2 = setTimeout(() => {
-      setStage(2); // GP. initials appear with metallic gold shimmer
-      playCinemaChime();
-    }, 900);
-    const t3 = setTimeout(() => setStage(3), 1700); // GIRESH PAVAAN S K reveals letter-by-letter
-    const t4 = setTimeout(() => {
-      handleDismiss();
-    }, 3600); // smooth clip-path mask exit
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleDismiss();
-      }
+    // Sound cues are gated by the sound preference and an explicit user gesture.
+    const t1 = window.setTimeout(() => {
+      setStage(1);
+      playInterfaceSound('core');
+    }, 110);
+    const t2 = window.setTimeout(() => {
+      setStage(2);
+      playInterfaceSound('ring-tick');
+      ringTickTimer.current = window.setTimeout(() => playInterfaceSound('ring-tick'), 120);
+    }, 560);
+    const t3 = window.setTimeout(() => {
+      setStage(3);
+      playInterfaceSound('hero-reveal');
+    }, 1050);
+    const t4 = window.setTimeout(dismiss, 1850);
+    sequenceTimers.current = [t1, t2, t3, t4];
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') dismiss();
     };
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+      window.clearTimeout(t4);
+      sequenceTimers.current = [];
+      if (ringTickTimer.current !== null) window.clearTimeout(ringTickTimer.current);
+      if (dismissTimer.current !== null) {
+        window.clearTimeout(dismissTimer.current);
+        dismissTimer.current = null;
+      }
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
-
-  const handleDismiss = () => {
-    setFading(true);
-    sessionStorage.setItem('gp_cinematic_intro_seen', 'true');
-    setTimeout(() => {
-      setVisible(false);
-      if (onComplete) onComplete();
-    }, 750);
-  };
+  }, [motionEnabled]);
 
   if (!visible) return null;
 
-  const fullNameChars = 'GIRESH PAVAAN S K'.split('');
-
+  const fullNameChars = PERSONAL_INFO.fullName.split('');
   return (
     <div
       role="dialog"
-      aria-label="Cinematic Introduction"
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505] transition-all duration-700 ${
-        fading
-          ? 'opacity-0 scale-105 pointer-events-none'
-          : 'opacity-100 scale-100'
-      }`}
-      style={{
-        clipPath: fading ? 'circle(0% at 50% 50%)' : 'circle(150% at 50% 50%)',
-        transition: 'clip-path 0.75s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.75s ease',
-      }}
+      aria-label="The Engineering Core introduction"
+      aria-modal="true"
+      className={`engineering-core-intro ${fading ? 'is-fading' : ''}`}
     >
-      {/* Background Blueprint Engineering Grid */}
-      <div className="absolute inset-0 bg-blueprint-grid opacity-20 pointer-events-none" />
+      <div className="engineering-core-grid" aria-hidden="true" />
+      <div className="engineering-core-corner core-corner-left">MECHANICAL SYSTEMS / PORTFOLIO</div>
+      <div className="engineering-core-corner core-corner-right">GP — CORE SEQUENCE 01</div>
 
-      {/* Atmospheric gold & technical blue spotlights */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#D4AF37]/6 blur-[160px] pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-[#24B8FF]/6 blur-[130px] pointer-events-none" />
-
-      {/* Decorative Blueprint Crosshairs */}
-      <div className="absolute top-8 left-8 text-[10px] font-mono text-[#24B8FF]/70 tracking-widest flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#24B8FF] animate-ping" />
-        DATUM: +00.00 / 00.00 · CALIBRATING
-      </div>
-      <div className="absolute top-8 right-8 text-[10px] font-mono text-[#D4AF37]/70 tracking-widest hidden sm:block">
-        SYS.REV: GP-2026-MECH
-      </div>
-      <div className="absolute bottom-8 left-8 text-[10px] font-mono text-[#24B8FF]/70 tracking-widest">
-        POLLACHI · 10.66° N, 77.00° E
-      </div>
-
-      {/* Skip button */}
       <button
-        onClick={handleDismiss}
-        aria-label="Skip introduction"
-        className="absolute bottom-8 right-8 px-3.5 py-1.5 rounded-xs border border-[#D4AF37]/35 hover:border-[#D4AF37] bg-[#111318]/90 text-[10px] font-mono text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all cursor-pointer backdrop-blur-md shadow-[0_0_15px_rgba(212,175,55,0.2)]"
+        type="button"
+        onClick={dismiss}
+        aria-label="Skip the Engineering Core introduction"
+        className="engineering-core-skip"
       >
-        SKIP INTRO [ESC]
+        SKIP INTRO <span aria-hidden="true">[ESC]</span>
       </button>
 
-      {/* Main Intro Stage */}
-      <div className="relative flex flex-col items-center text-center px-6 max-w-xl z-10">
-        {/* Expanding Thin Gold Line with subtle blue core */}
-        <div
-          className={`h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent shadow-[0_0_15px_#D4AF37] transition-all duration-700 ease-out ${
-            stage >= 1 ? 'w-56 sm:w-80 opacity-100' : 'w-0 opacity-0'
-          }`}
-        />
-
-        {/* Monogram Initials GP. with Metallic Gold Shimmer */}
-        <div
-          className={`mt-6 font-serif text-6xl sm:text-8xl font-bold tracking-tight transition-all duration-700 transform ${
-            stage >= 2 ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
-          }`}
-        >
-          <span className="text-gradient-gold drop-shadow-[0_0_35px_rgba(212,175,55,0.4)]">
-            GP.
-          </span>
-        </div>
-
-        {/* Staggered Letter-by-Letter Reveal of Name */}
-        <div
-          className={`mt-5 space-y-2.5 transition-all duration-700 transform ${
-            stage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <h2 className="font-serif text-xl sm:text-2xl text-[#E8DFD8] font-light tracking-[0.28em] uppercase flex items-center justify-center">
-            {fullNameChars.map((char, idx) => (
-              <span
-                key={idx}
-                className="inline-block transition-all duration-500 transform"
-                style={{
-                  transitionDelay: `${idx * 45}ms`,
-                  opacity: stage >= 3 ? 1 : 0,
-                  transform: stage >= 3 ? 'translateY(0)' : 'translateY(8px)',
-                }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </span>
+      <div className="engineering-core-content">
+        <div className={`engineering-core-graphic ${stage >= 1 ? 'is-active' : ''} ${stage >= 2 ? 'is-aligned' : ''}`} aria-hidden="true">
+          <svg viewBox="0 0 200 200" className="engineering-core-rings">
+            <circle className="core-ring core-ring-outer" cx="100" cy="100" r="88" />
+            <circle className="core-ring core-ring-middle" cx="100" cy="100" r="69" />
+            <circle className="core-ring core-ring-inner" cx="100" cy="100" r="48" />
+            <circle className="core-core-seat" cx="100" cy="100" r="34" />
+            {Array.from({ length: 24 }, (_, index) => (
+              <line
+                key={index}
+                className="core-index-mark"
+                x1="100"
+                y1={index % 3 === 0 ? '5' : '9'}
+                x2="100"
+                y2={index % 3 === 0 ? '15' : '13'}
+                transform={`rotate(${index * 15} 100 100)`}
+              />
             ))}
-          </h2>
-
-          <p className="font-mono text-xs text-[#D4AF37] tracking-[0.32em] uppercase font-semibold">
-            MECHANICAL ENGINEERING
-          </p>
+            <path className="core-index-witness" d="M100 2v9M198 100h-9M100 198v-9M2 100h9" />
+          </svg>
+          <div className={`engineering-core-monogram ${stage >= 2 ? 'is-visible' : ''}`}>GP</div>
         </div>
 
-        {/* Lower expanding indicator */}
-        <div
-          className={`mt-8 h-px bg-gradient-to-r from-transparent via-[#24B8FF] to-transparent transition-all duration-700 delay-300 ${
-            stage >= 3 ? 'w-40 opacity-70 shadow-[0_0_10px_#24B8FF]' : 'w-0 opacity-0'
-          }`}
-        />
+        <p className="engineering-core-kicker">
+          <span className="engineering-core-status-dot" />
+          {stage >= 2 ? 'SYSTEM ONLINE' : 'ENGINEERING CORE / INITIALIZING'}
+        </p>
+        <p className="engineering-core-title">THE ENGINEERING CORE</p>
+        <h1 className={`engineering-core-name ${stage >= 3 ? 'is-visible' : ''}`}>
+          {fullNameChars.map((character, index) => (
+            <span key={`${character}-${index}`} style={{ transitionDelay: `${index * 22}ms` }}>
+              {character === ' ' ? '\u00a0' : character}
+            </span>
+          ))}
+        </h1>
+        <p className={`engineering-core-subtitle ${stage >= 3 ? 'is-visible' : ''}`}>
+          MECHANICAL ENGINEERING · GIRESH PAVAAN S K
+        </p>
       </div>
+
+      <div className="engineering-core-footer">PRECISION · DESIGN · MOTION</div>
     </div>
   );
 };
